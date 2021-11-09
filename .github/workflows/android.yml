@@ -27,7 +27,7 @@ jobs:
           GOOGLE_SERVICE_JSON: ${{ secrets.GOOGLE_SERVICE_JSON }}
       run: echo $GOOGLE_SERVICE_JSON > app/google-services.json
     - name: Build with Gradle
-      run: ./gradlew build
+      run: ./gradlew build -x test
     - name: Test with Gradle
       run: ./gradlew test
     - name: Build result to slack
