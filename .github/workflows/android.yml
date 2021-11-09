@@ -29,7 +29,7 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build
     - name: build result to slack
-    - uses: 8398a7/action-slack@v3
+      uses: 8398a7/action-slack@v3
       with:
         status: ${{ job.status }}
         fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
