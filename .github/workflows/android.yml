@@ -28,8 +28,8 @@ jobs:
       run: echo $GOOGLE_SERVICE_JSON > app/google-services.json
     - name: Build with Gradle
       run: ./gradlew build
-    - name: Build Test with Gradle
-      run: ./gradlew build test
+    - name: Test with Gradle
+      run: ./gradlew test
     - name: Build result to slack
       uses: 8398a7/action-slack@v3
       with:
