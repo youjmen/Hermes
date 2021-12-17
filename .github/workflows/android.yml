@@ -24,6 +24,10 @@ jobs:
       env:
           GOOGLE_SERVICE_JSON: ${{ secrets.GOOGLE_SERVICE_JSON }}
       run: echo $GOOGLE_SERVICE_JSON > app/google-services.json
+    - name: Access local.propeties
+      env:
+          LOCAL_PROPERTIES: ${{ secrets.LOCAL_PROPERTIES }}
+      run: echo $LOCAL_PROPERTIES > local.properties
     - name: Build with Gradle
       run: ./gradlew build -x test
     - name: Test with Gradle
