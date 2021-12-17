@@ -1,9 +1,17 @@
 name: Android CI
 
 on:
+
   pull_request:
     branches: [ main , develop ]
-
+  workflow_dispatch:
+    inputs:
+      baseUrl:
+        description: 'Base URL'
+        required: true
+      mapKey:
+        description: 'TTB Key'
+        required: true
 jobs:
   build:
 
@@ -24,10 +32,9 @@ jobs:
       env:
           GOOGLE_SERVICE_JSON: ${{ secrets.GOOGLE_SERVICE_JSON }}
       run: echo $GOOGLE_SERVICE_JSON > app/google-services.json
-    - name: Access local.propeties
-      env:
-          LOCAL_PROPERTIES: ${{ secrets.LOCAL_PROPERTIES }}
-      run: echo $LOCAL_PROPERTIES > ./local.properties
+    - name: Add local.properties
+      run: |
+          bash update_properties.sh ${{ github.event.inputs.baseUrl }} ${{ github.event.inputs.ttbKey }}
     - name: Build with Gradle
       run: ./gradlew build -x test --stacktrace
     - name: Test with Gradle
