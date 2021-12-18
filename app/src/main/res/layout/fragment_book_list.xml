@@ -4,14 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".book.view.activity.BookActivity">
+    tools:context=".book.view.fragment.BookListFragment">
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fcv_book"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_books"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
