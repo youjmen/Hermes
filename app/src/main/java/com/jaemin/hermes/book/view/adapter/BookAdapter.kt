@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.jaemin.hermes.R
 import com.jaemin.hermes.databinding.ItemBookBinding
 import com.jaemin.hermes.entity.Book
 
@@ -28,6 +29,8 @@ class BookViewHolder(private val binding : ItemBookBinding) : RecyclerView.ViewH
     fun bind(book : Book){
         binding.tvBookName.text = book.title
         binding.tvAuthor.text = book.author
+        binding.tvDescription.text =book.description
+        binding.tvPrice.text = binding.root.context.getString(R.string.book_price, book.price)
         Glide.with(binding.ivThumbnail)
             .load(book.cover)
             .into(binding.ivThumbnail)
