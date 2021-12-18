@@ -1,8 +1,19 @@
 package com.jaemin.hermes.response
 
-data class BookResponse(val title : String,
+import com.google.gson.annotations.SerializedName
+import com.jaemin.hermes.entity.Book
+
+data class BookResponse(
+                        @SerializedName("title")
+                        val title : String,
+                        @SerializedName("author")
                         val author : String,
-                        val pubDate : String,
+                        @SerializedName("description")
                         val description : String,
-                        val cover : String
+                        @SerializedName("cover")
+                        val cover : String,
+                        @SerializedName("priceStandard")
+                        val price : Int
                         )
+fun BookResponse.toEntity() : Book =
+    Book(title, author, description, cover, price)

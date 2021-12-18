@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatActivity
-import com.jaemin.hermes.book.activity.BookActivity
+import com.jaemin.hermes.book.view.activity.BookActivity
 import com.jaemin.hermes.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {

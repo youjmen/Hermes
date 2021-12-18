@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">Hermes</string>
     <string name="input_book_title">책 제목을 입력하세요.</string>
+    <string name="book_price">가격 : %d</string>
+    <string name="empty_books">요청하신 책이 없습니다.</string>
 </resources>

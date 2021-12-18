@@ -1,21 +1,22 @@
-package com.jaemin.hermes.book.activity
+package com.jaemin.hermes.book.view.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.jaemin.hermes.book.viewmodel.BookViewModel
+import com.jaemin.hermes.R
+import com.jaemin.hermes.book.view.fragment.BookListFragment
 import com.jaemin.hermes.databinding.ActivityBookBinding
 import com.jaemin.hermes.main.activity.MainActivity
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class BookActivity : AppCompatActivity() {
     private lateinit var binding : ActivityBookBinding
-    private val viewModel : BookViewModel by viewModel()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityBookBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        intent.getStringExtra(MainActivity.BOOK_NAME)?.let {
-            viewModel.searchBooks(it)
-        }
+        supportFragmentManager.beginTransaction().replace(R.id.fcv_book,BookListFragment().apply {
+            arguments = Bundle().apply {
+                putString(MainActivity.BOOK_NAME, intent.getStringExtra(MainActivity.BOOK_NAME))
+            }
+        }).commit()
     }
 }
