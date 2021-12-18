@@ -17,18 +17,20 @@ android {
         targetSdk 31
         versionCode 1
         versionName "1.0"
-        buildConfigField("String", "BASE_URL", properties.getProperty('base_url'))
-        buildConfigField("String", "TTB_KEY", properties.getProperty('ttb_key'))
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
             minifyEnabled false
+            buildConfigField("String", "BASE_URL", properties.getProperty('base_url'))
+            buildConfigField("String", "TTB_KEY", properties.getProperty('ttb_key'))
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug{
             minifyEnabled false
+            buildConfigField("String", "BASE_URL", properties.getProperty('base_url'))
+            buildConfigField("String", "TTB_KEY", properties.getProperty('ttb_key'))
         }
     }
     buildFeatures {
