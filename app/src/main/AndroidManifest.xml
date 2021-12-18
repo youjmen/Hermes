@@ -12,7 +12,7 @@
         android:theme="@style/Theme.Hermes"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".book.activity.BookActivity"
+            android:name="com.jaemin.hermes.book.view.activity.BookActivity"
             android:exported="true" />
         <activity
             android:name=".SplashActivity"
