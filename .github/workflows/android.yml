@@ -23,7 +23,9 @@ jobs:
       run: chmod +x gradlew
     - name: Generate local.properties
       run: |
+        echo ${{secrets.BASE_URL}}
         echo ${{secrets.BASE_URL}} > ./local.properties
+        echo ${{secrets.TTB_KEY}} 
         echo ${{secrets.TTB_KEY}} > ./local.properties
         cat ./local.properties
     - name: Decode google-services.json
