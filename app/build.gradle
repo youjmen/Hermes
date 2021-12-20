@@ -87,4 +87,8 @@ dependencies {
     implementation "io.insert-koin:koin-android:2.1.6"
     implementation "io.insert-koin:koin-androidx-viewmodel:2.1.6"
 
+    // Naver Map
+    implementation 'com.naver.maps:map-sdk:3.13.0'
+    implementation 'com.google.android.gms:play-services-location:19.0.0'
+
 }
