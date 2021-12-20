@@ -6,6 +6,7 @@ import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatActivity
 import com.jaemin.hermes.book.view.activity.BookActivity
 import com.jaemin.hermes.databinding.ActivityMainBinding
+import com.jaemin.hermes.main.fragment.LocationRegisterBottomSheetFragment
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -21,6 +22,9 @@ class MainActivity : AppCompatActivity() {
                 return@setOnEditorActionListener true
             }
             return@setOnEditorActionListener false
+        }
+        binding.clLocation.setOnClickListener {
+            LocationRegisterBottomSheetFragment().show(supportFragmentManager,LocationRegisterBottomSheetFragment.CLASS_NAME)
         }
     }
     companion object{
