@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/lightBlack"
+    android:background="@color/white"
     tools:context=".book.view.fragment.BookListFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/abl_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/lightBlack"
+        android:background="@color/calmingCoral"
         android:fitsSystemWindows="true">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
