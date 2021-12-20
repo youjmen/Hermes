@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.Hermes" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimary">@color/calmingCoral</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
@@ -19,5 +19,13 @@
         <item name="colorPrimaryDark">@color/purple_700</item>
         <item name="colorAccent">@color/white</item>
         <item name="android:statusBarColor">@color/teal_200</item>
+    </style>
+    <style name="LightText" parent="android:TextAppearance">
+        <item name="android:fontFamily">@font/spoqahansansneolight</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+    <style name="RegularText" parent="android:TextAppearance">
+        <item name="android:fontFamily">@font/spoqahansansneoregular</item>
+        <item name="android:includeFontPadding">false</item>
     </style>
 </resources>
