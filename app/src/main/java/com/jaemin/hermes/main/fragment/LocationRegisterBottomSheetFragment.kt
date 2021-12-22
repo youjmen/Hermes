@@ -3,12 +3,14 @@ package com.jaemin.hermes.main.fragment
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
+import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.jaemin.hermes.R
@@ -19,12 +21,13 @@ import com.naver.maps.map.MapFragment
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.util.FusedLocationSource
+import java.lang.Exception
 
 class LocationRegisterBottomSheetFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
     private lateinit var binding: FragmentLocationRegisterBottomSheetBinding
     private lateinit var mapFragment: MapFragment
     private lateinit var naverMap: NaverMap
-    private lateinit var locationSource : FusedLocationSource
+    private lateinit var fusedLocationProvider: FusedLocationProviderClient
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,7 +45,6 @@ class LocationRegisterBottomSheetFragment : BottomSheetDialogFragment(), OnMapRe
                 childFragmentManager.beginTransaction().add(R.id.fl_location, it).commit()
             }
         mapFragment.getMapAsync(this)
-
         val locationPermissionRequest = registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
         ) { permissions ->
@@ -54,6 +56,33 @@ class LocationRegisterBottomSheetFragment : BottomSheetDialogFragment(), OnMapRe
                 requireActivity().finish()
             }
 
+        }
+        binding.tvCurrentLocation.setOnClickListener {
+            Toast.makeText(requireContext(),"Dsafasdf", Toast.LENGTH_SHORT).show()
+            try {
+                Log.d("dsfasdf",(ActivityCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED).toString()+"ff")
+
+                if (ActivityCompat.checkSelfPermission(
+                        requireContext(),
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                    ) == PackageManager.PERMISSION_GRANTED
+                ) {
+                    Log.d("fff","fff")
+                    fusedLocationProvider.lastLocation.addOnSuccessListener {
+                        Log.d("das",it.latitude.toString())
+                        Log.d("das",it.longitude.toString())
+                        Log.d("dddd","dddd")
+
+                    }
+                }
+
+            } catch (e:Exception){
+                Log.d("dsadsaf","dsafas")
+                e.printStackTrace()
+            }
         }
 
         locationPermissionRequest.launch(arrayOf(
@@ -67,11 +96,14 @@ class LocationRegisterBottomSheetFragment : BottomSheetDialogFragment(), OnMapRe
 
     override fun onMapReady(map: NaverMap) {
         naverMap = map
-        locationSource = FusedLocationSource(this, 100)
-        map.locationSource = locationSource
+        fusedLocationProvider = LocationServices.getFusedLocationProviderClient(requireActivity())
         val uiSettings = map.uiSettings
         uiSettings.isLocationButtonEnabled = true
 
+
+    }
+
+    private fun getCurrentLocation(){
 
     }
 
