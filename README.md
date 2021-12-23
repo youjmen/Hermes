@@ -2,8 +2,7 @@
 
 
 ### Commit Conventions
-- **feat:** 새로운 기능 추가
-- **modify**: 수정
+- **feat:** 새로운 기능 추가 및 수정
 - **delete**: 삭제
 - **rename** : 파일 이름 변경
 - **fix:** 버그 픽스
