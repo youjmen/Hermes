@@ -2,6 +2,7 @@ package com.jaemin.hermes.base
 
 import android.app.Application
 import com.jaemin.hermes.di.bookModule
+import com.jaemin.hermes.di.locationModule
 import com.jaemin.hermes.di.networkModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -11,7 +12,7 @@ class HermesApplication : Application() {
         super.onCreate()
         startKoin{
             androidContext(this@HermesApplication)
-            modules(listOf(networkModule, bookModule))
+            modules(listOf(networkModule, bookModule, locationModule))
         }
     }
 }
