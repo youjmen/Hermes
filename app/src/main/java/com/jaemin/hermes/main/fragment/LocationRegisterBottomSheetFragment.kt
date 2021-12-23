@@ -20,15 +20,18 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.jaemin.hermes.R
 import com.jaemin.hermes.databinding.FragmentLocationRegisterBottomSheetBinding
+import com.jaemin.hermes.main.viewmodel.LocationRegisterViewModel
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.MapFragment
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.util.FusedLocationSource
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.lang.Exception
 
 class LocationRegisterBottomSheetFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
+    private val viewModel : LocationRegisterViewModel by viewModel()
     private lateinit var binding: FragmentLocationRegisterBottomSheetBinding
     private lateinit var mapFragment: MapFragment
     private lateinit var naverMap: NaverMap
@@ -55,7 +58,8 @@ class LocationRegisterBottomSheetFragment : BottomSheetDialogFragment(), OnMapRe
         requestLocationPermission()
         binding.tvCurrentLocation.setOnClickListener {
             try {
-                setCurrentLocationToMap()
+                viewModel.searchLocation()
+//                setCurrentLocationToMap()
             } catch (e: Exception){
                 Log.d("dsadsaf","dsafas")
                 e.printStackTrace()
