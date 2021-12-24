@@ -12,9 +12,9 @@ import retrofit2.Retrofit
 val bookModule = module {
     fun provideBookService(retrofit: Retrofit): BookService =
         retrofit.create(BookService::class.java)
-    factory<BookRepository> { BookRepositoryImpl(provideBookService(get())) }
-    viewModel { BookViewModel(get()) }
     single { provideBookService(get(named("book"))) }
+    factory<BookRepository> { BookRepositoryImpl(get()) }
+    viewModel { BookViewModel(get()) }
 
 
 
