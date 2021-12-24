@@ -1,4 +1,4 @@
-package com.jaemin.hermes.main.activity
+package com.jaemin.hermes.main.view.activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,7 +6,7 @@ import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatActivity
 import com.jaemin.hermes.book.view.activity.BookActivity
 import com.jaemin.hermes.databinding.ActivityMainBinding
-import com.jaemin.hermes.main.fragment.LocationRegisterBottomSheetFragment
+import com.jaemin.hermes.main.view.fragment.LocationRegisterBottomSheetFragment
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding

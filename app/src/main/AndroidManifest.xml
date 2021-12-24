@@ -26,7 +26,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".main.activity.MainActivity"
+            android:name="com.jaemin.hermes.main.view.activity.MainActivity"
             android:exported="true"></activity>
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"

@@ -3,7 +3,7 @@ package com.jaemin.hermes
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.jaemin.hermes.main.activity.MainActivity
+import com.jaemin.hermes.main.view.activity.MainActivity
 
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
