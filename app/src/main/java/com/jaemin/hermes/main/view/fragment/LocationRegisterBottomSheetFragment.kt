@@ -1,18 +1,21 @@
-package com.jaemin.hermes.main.fragment
+package com.jaemin.hermes.main.view.fragment
 
 import android.Manifest
 import android.app.Dialog
-import android.content.DialogInterface
 import android.content.pm.PackageManager
-import android.graphics.PointF
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -20,24 +23,22 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.jaemin.hermes.R
 import com.jaemin.hermes.databinding.FragmentLocationRegisterBottomSheetBinding
+import com.jaemin.hermes.entity.Place
+import com.jaemin.hermes.main.view.adapter.PlaceAdapter
 import com.jaemin.hermes.main.viewmodel.LocationRegisterViewModel
 import com.naver.maps.geometry.LatLng
-import com.naver.maps.map.CameraUpdate
-import com.naver.maps.map.MapFragment
-import com.naver.maps.map.NaverMap
-import com.naver.maps.map.OnMapReadyCallback
+import com.naver.maps.map.*
+import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.util.FusedLocationSource
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.lang.Exception
 
-class LocationRegisterBottomSheetFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
+class LocationRegisterBottomSheetFragment : BottomSheetDialogFragment(), OnMapReadyCallback, PlaceAdapter.OnItemClickListener {
     private val viewModel : LocationRegisterViewModel by viewModel()
     private lateinit var binding: FragmentLocationRegisterBottomSheetBinding
     private lateinit var mapFragment: MapFragment
     private lateinit var naverMap: NaverMap
-    private lateinit var locationSource: FusedLocationSource
-
     private lateinit var fusedLocationProvider: FusedLocationProviderClient
+    private lateinit var adapter : PlaceAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,25 +51,60 @@ class LocationRegisterBottomSheetFragment : BottomSheetDialogFragment(), OnMapRe
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        fusedLocationProvider = LocationServices.getFusedLocationProviderClient(requireActivity())
+
         mapFragment = childFragmentManager.findFragmentById(R.id.fl_location) as MapFragment?
             ?: MapFragment.newInstance().also {
                 childFragmentManager.beginTransaction().add(R.id.fl_location, it).commit()
             }
         mapFragment.getMapAsync(this)
         requestLocationPermission()
-        binding.tvCurrentLocation.setOnClickListener {
+        binding.tvSetToCurrentLocation.setOnClickListener {
             try {
-                viewModel.searchLocation()
-//                setCurrentLocationToMap()
+                setCurrentLocationToMap()
             } catch (e: Exception){
                 Log.d("dsadsaf","dsafas")
                 e.printStackTrace()
             }
         }
+        setSearchLocationView()
+        adapter = PlaceAdapter(this)
+        binding.rvLocation.adapter = adapter
 
+
+        with(viewModel){
+            location.observe(viewLifecycleOwner){
+                searchPlaces()
+            }
+            places.observe(viewLifecycleOwner){
+                adapter.submitList(it)
+            }
+        }
 
     }
+    private fun setSearchLocationView(){
+        binding.etLocationRegister.setOnEditorActionListener { p0, actionId, p2 ->
+            if(actionId == EditorInfo.IME_ACTION_SEARCH){
+                viewModel.searchPlaces()
+                return@setOnEditorActionListener true
+            }
+            return@setOnEditorActionListener false
+        }
+        binding.etLocationRegister.addTextChangedListener(object : TextWatcher{
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                viewModel.location.value = binding.etLocationRegister.text.toString()
+                binding.rvLocation.visibility = View.VISIBLE
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+            }
+
+        })
+    }
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
         dialog.setOnShowListener{
@@ -97,7 +133,7 @@ class LocationRegisterBottomSheetFragment : BottomSheetDialogFragment(), OnMapRe
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION))
     }
-    fun setCurrentLocationToMap(){
+    private fun setCurrentLocationToMap(){
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -105,8 +141,11 @@ class LocationRegisterBottomSheetFragment : BottomSheetDialogFragment(), OnMapRe
         ) {
             if (this::fusedLocationProvider.isInitialized) {
                 fusedLocationProvider.lastLocation.addOnSuccessListener {
-                    naverMap.moveCamera(CameraUpdate.scrollTo(LatLng(it.latitude, it.longitude)))
+                    naverMap.moveCamera(CameraUpdate.scrollTo(LatLng(it.latitude, it.longitude)).animate(CameraAnimation.Easing))
                 }
+            }
+            else{
+                Log.d("dddd","not works")
             }
 
         }
@@ -116,15 +155,29 @@ class LocationRegisterBottomSheetFragment : BottomSheetDialogFragment(), OnMapRe
         naverMap = map
         naverMap.maxZoom = 18.0
         naverMap.minZoom = 10.0
-        fusedLocationProvider = LocationServices.getFusedLocationProviderClient(requireActivity())
-        locationSource = FusedLocationSource(requireActivity(), LOCATION_PERMISSION_REQUEST_CODE)
-        naverMap.locationSource = locationSource
-        val uiSettings = map.uiSettings
+        val uiSettings = naverMap.uiSettings
         uiSettings.isLocationButtonEnabled = true
         setCurrentLocationToMap()
-
     }
 
+    override fun onItemClick(item: Place) {
+        binding.etLocationRegister.setText(item.name)
+        val cameraUpdate = CameraUpdate.scrollTo(LatLng(item.latitude, item.longitude)).animate(CameraAnimation.Easing)
+        naverMap.moveCamera(cameraUpdate)
+        val marker = Marker()
+        marker.position = LatLng(item.latitude, item.longitude)
+        marker.map = naverMap
+        marker.captionText = item.name
+        hideKeyboard()
+        binding.rvLocation.visibility = View.GONE
+        binding.tvPlaceName.text = item.name
+        binding.tvPlaceAddress.text = item.roadAddress
+        binding.clRegisterLocation.visibility = View.VISIBLE
+    }
+    private fun hideKeyboard(){
+        (context?.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as? InputMethodManager)
+            ?.hideSoftInputFromWindow(view?.windowToken, 0)
+    }
     private fun getCurrentLocation(){
 
     }
@@ -132,6 +185,7 @@ class LocationRegisterBottomSheetFragment : BottomSheetDialogFragment(), OnMapRe
         const val CLASS_NAME = "LocationRegisterBottomSheetFragment"
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
     }
+
 
 
 }

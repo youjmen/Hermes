@@ -1,26 +1,32 @@
 package com.jaemin.hermes.main.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.jaemin.hermes.base.BaseViewModel
+import com.jaemin.hermes.entity.Place
 import com.jaemin.hermes.repository.LocationRepository
+import com.jaemin.hermes.response.toEntity
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
 
-class LocationRegisterViewModel(private val locationRepository: LocationRepository) : ViewModel(){
+class LocationRegisterViewModel(private val locationRepository: LocationRepository) : BaseViewModel() {
 
-    private val _location : MutableLiveData<String> = MutableLiveData("갤러리휴리움")
-    private val location : LiveData<String> get() = _location
+    val location: MutableLiveData<String> = MutableLiveData()
 
-    fun searchLocation(){
-        _location.value?.let {
-            locationRepository.searchBuildings(it)
+    private val _places: MutableLiveData<List<Place>> = MutableLiveData()
+    val places: LiveData<List<Place>> get() = _places
+
+    fun searchPlaces() {
+        location.value?.let { it ->
+            addDisposable(locationRepository.searchPlaces(it)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                           Log.d("locationResponse", it.toString())
-                },{})
+                .subscribe({ response->
+                    _places.value = response.places.map { place ->
+                        place.toEntity()
+                    }
+                }, {}))
         }
     }
 }
