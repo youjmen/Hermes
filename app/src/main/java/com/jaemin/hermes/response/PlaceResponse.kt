@@ -1,9 +1,9 @@
 package com.jaemin.hermes.response
 
 import com.google.gson.annotations.SerializedName
-import com.jaemin.hermes.entity.Location
+import com.jaemin.hermes.entity.Place
 
-data class LocationResponse(
+data class PlaceResponse(
     @SerializedName("place_name")
     val name : String,
     @SerializedName("road_address_name")
@@ -14,5 +14,5 @@ data class LocationResponse(
     val longitude : String
 )
 
-fun LocationResponse.toEntity() : Location =
-    Location(name, roadAddress, latitude, longitude)
+fun PlaceResponse.toEntity() : Place =
+    Place(name, roadAddress, latitude.toDouble(), longitude.toDouble())

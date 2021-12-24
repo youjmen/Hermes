@@ -1,9 +1,9 @@
 package com.jaemin.hermes.entity
 
 
-data class Location(
+data class Place(
     val name : String,
     val roadAddress : String,
-    val latitude : String,
-    val longitude : String
+    val latitude : Double,
+    val longitude : Double
 )

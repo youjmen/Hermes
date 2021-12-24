@@ -1,17 +1,17 @@
 package com.jaemin.hermes.datasource
 
 import com.jaemin.hermes.remote.LocationService
-import com.jaemin.hermes.response.LocationsResponse
+import com.jaemin.hermes.response.PlacesResponse
 import io.reactivex.rxjava3.core.Single
 
 class LocationDataSourceImpl(private val locationService: LocationService)  : LocationDataSource{
-    override fun searchBuildings(query: String): Single<LocationsResponse> =
-        locationService.searchLocation(query)
+    override fun searchPlaces(query: String): Single<PlacesResponse> =
+        locationService.searchPlace(query)
 
-    override fun searchNearbyBuildings(
+    override fun searchNearbyPlaces(
         query: String,
         longitude: Double,
         latitude: Double
-    ): Single<LocationsResponse> =
-        locationService.searchNearbyLocation(query, longitude.toString(), latitude.toString())
+    ): Single<PlacesResponse> =
+        locationService.searchNearbyPlace(query, longitude.toString(), latitude.toString())
 }
