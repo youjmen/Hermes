@@ -1,5 +1,6 @@
 package com.jaemin.hermes.datasource.remote
 
+import android.util.Log
 import com.jaemin.hermes.datasource.local.UserPlace
 import com.jaemin.hermes.datasource.local.UserPlaceDao
 import com.jaemin.hermes.datasource.local.toDBData
@@ -29,13 +30,14 @@ class LocationDataSourceImpl(private val locationService: LocationService, priva
         locationService.searchPlaceByAddress(longitude.toString(), latitude.toString())
 
     override fun insertCurrentLocation(place: Place): Completable {
-        return userPlaceDao.deleteAll().doOnComplete {
-            userPlaceDao.insertUserPlace(place.toDBData())
-        }
+        return userPlaceDao.insertUserPlace(place.toDBData())
+
     }
 
-    override fun getCurrentLocation(): Single<Place> =
-        userPlaceDao.getUserPlace().map {
-            it.first().toEntity()
+    override fun getCurrentLocation(): Single<Place> {
+        return userPlaceDao.getUserPlace().map {
+            Log.d("gclplace", it.toString())
+            it.last().toEntity()
         }
+    }
 }

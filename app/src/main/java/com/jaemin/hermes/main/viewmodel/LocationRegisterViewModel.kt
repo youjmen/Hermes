@@ -67,7 +67,7 @@ class LocationRegisterViewModel(private val locationRepository: LocationReposito
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-
+                currentPlace.value = it
             }, {
                 it.printStackTrace()
             })

@@ -52,7 +52,6 @@ class LocationRegisterBottomSheetFragment : BottomSheetDialogFragment(), OnMapRe
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         fusedLocationProvider = LocationServices.getFusedLocationProviderClient(requireActivity())
-
         mapFragment = childFragmentManager.findFragmentById(R.id.fl_location) as MapFragment?
             ?: MapFragment.newInstance().also {
                 childFragmentManager.beginTransaction().add(R.id.fl_location, it).commit()
@@ -168,6 +167,8 @@ class LocationRegisterBottomSheetFragment : BottomSheetDialogFragment(), OnMapRe
         naverMap.minZoom = 10.0
         val uiSettings = naverMap.uiSettings
         uiSettings.isLocationButtonEnabled = true
+        viewModel.getCurrentLocation()
+
     }
 
     override fun onItemClick(item: Place) {
