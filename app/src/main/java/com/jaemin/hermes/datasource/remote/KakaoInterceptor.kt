@@ -1,4 +1,4 @@
-package com.jaemin.hermes.datasource
+package com.jaemin.hermes.datasource.remote
 
 import okhttp3.Interceptor
 import okhttp3.Response

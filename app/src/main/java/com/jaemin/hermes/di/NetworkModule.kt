@@ -1,7 +1,7 @@
 package com.jaemin.hermes.di
 
 import com.jaemin.hermes.BuildConfig
-import com.jaemin.hermes.datasource.KakaoInterceptor
+import com.jaemin.hermes.datasource.remote.KakaoInterceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.core.qualifier.named
@@ -36,7 +36,7 @@ fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClien
         .addInterceptor(loggingInterceptor)
         .build()
 }
-fun provideLocationOkHttpClient(interceptor : KakaoInterceptor,loggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
+fun provideLocationOkHttpClient(interceptor : KakaoInterceptor, loggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
     return OkHttpClient.Builder()
         .addInterceptor(interceptor)
         .addInterceptor(loggingInterceptor)

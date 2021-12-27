@@ -1,7 +1,7 @@
 package com.jaemin.hermes.di
 
-import com.jaemin.hermes.datasource.LocationDataSource
-import com.jaemin.hermes.datasource.LocationDataSourceImpl
+import com.jaemin.hermes.datasource.remote.LocationDataSource
+import com.jaemin.hermes.datasource.remote.LocationDataSourceImpl
 import com.jaemin.hermes.main.viewmodel.LocationRegisterViewModel
 import com.jaemin.hermes.remote.LocationService
 import com.jaemin.hermes.repository.LocationRepository
@@ -14,10 +14,10 @@ import retrofit2.Retrofit
 val locationModule = module {
     fun provideLocationService(retrofit: Retrofit): LocationService =
         retrofit.create(LocationService::class.java)
-    factory<LocationRepository> { LocationRepositoryImpl(get()) }
-    factory<LocationDataSource> { LocationDataSourceImpl(get()) }
-    viewModel { LocationRegisterViewModel(get()) }
     single { provideLocationService(get(named("location"))) }
+    factory<LocationDataSource> { LocationDataSourceImpl(get(),get()) }
+    factory<LocationRepository> { LocationRepositoryImpl(get()) }
+    viewModel { LocationRegisterViewModel(get()) }
 
 
 
