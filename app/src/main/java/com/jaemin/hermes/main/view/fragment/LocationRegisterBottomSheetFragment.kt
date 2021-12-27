@@ -22,6 +22,7 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.jaemin.hermes.R
+import com.jaemin.hermes.base.EventObserver
 import com.jaemin.hermes.databinding.FragmentLocationRegisterBottomSheetBinding
 import com.jaemin.hermes.entity.Place
 import com.jaemin.hermes.main.view.adapter.PlaceAdapter
@@ -29,7 +30,6 @@ import com.jaemin.hermes.main.viewmodel.LocationRegisterViewModel
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
-import com.naver.maps.map.util.FusedLocationSource
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LocationRegisterBottomSheetFragment : BottomSheetDialogFragment(), OnMapReadyCallback, PlaceAdapter.OnItemClickListener {
@@ -67,6 +67,9 @@ class LocationRegisterBottomSheetFragment : BottomSheetDialogFragment(), OnMapRe
                 e.printStackTrace()
             }
         }
+        binding.btnRegisterLocation.setOnClickListener {
+            viewModel.saveCurrentLocation()
+        }
         setSearchLocationView()
         adapter = PlaceAdapter(this)
         binding.rvLocation.adapter = adapter
@@ -79,6 +82,13 @@ class LocationRegisterBottomSheetFragment : BottomSheetDialogFragment(), OnMapRe
             places.observe(viewLifecycleOwner){
                 adapter.submitList(it)
             }
+            currentPlace.observe(viewLifecycleOwner){
+                setCurrentLocation(it)
+            }
+            saveLocationSuccessEvent.observe(viewLifecycleOwner, EventObserver{
+                Toast.makeText(requireContext(), "위치 등록에 성공하셨습니다.", Toast.LENGTH_SHORT).show()
+                dismiss()
+            })
         }
 
     }
@@ -121,7 +131,7 @@ class LocationRegisterBottomSheetFragment : BottomSheetDialogFragment(), OnMapRe
         ) { permissions ->
             if (permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true &&
                 permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true){
-                setCurrentLocationToMap()
+
             }
             else{
                 Toast.makeText(requireContext(), "위치 접근 권한을 허용해주세요.", Toast.LENGTH_SHORT).show()
@@ -140,9 +150,10 @@ class LocationRegisterBottomSheetFragment : BottomSheetDialogFragment(), OnMapRe
             ) == PackageManager.PERMISSION_GRANTED
         ) {
             if (this::fusedLocationProvider.isInitialized) {
-                fusedLocationProvider.lastLocation.addOnSuccessListener {
-                    naverMap.moveCamera(CameraUpdate.scrollTo(LatLng(it.latitude, it.longitude)).animate(CameraAnimation.Easing))
-                }
+//                    fusedLocationProvider.lastLocation.addOnSuccessListener {
+//                    naverMap.moveCamera(CameraUpdate.scrollTo(LatLng(it.latitude, it.longitude)).animate(CameraAnimation.Easing))
+//                    viewModel.searchCurrentLocationPlace(it.longitude, it.latitude)
+//                }
             }
             else{
                 Log.d("dddd","not works")
@@ -157,10 +168,13 @@ class LocationRegisterBottomSheetFragment : BottomSheetDialogFragment(), OnMapRe
         naverMap.minZoom = 10.0
         val uiSettings = naverMap.uiSettings
         uiSettings.isLocationButtonEnabled = true
-        setCurrentLocationToMap()
     }
 
     override fun onItemClick(item: Place) {
+        setCurrentLocation(item)
+        viewModel.currentPlace.value = item
+    }
+    private fun setCurrentLocation(item: Place){
         binding.etLocationRegister.setText(item.name)
         val cameraUpdate = CameraUpdate.scrollTo(LatLng(item.latitude, item.longitude)).animate(CameraAnimation.Easing)
         naverMap.moveCamera(cameraUpdate)
