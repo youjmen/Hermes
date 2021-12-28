@@ -1,5 +1,6 @@
 package com.jaemin.hermes.main.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -27,15 +28,16 @@ class LocationRegisterViewModel(private val locationRepository: LocationReposito
     private val _saveLocationSuccessEvent: MutableLiveData<Event<Unit>> = MutableLiveData()
     val saveLocationSuccessEvent: LiveData<Event<Unit>> get() = _saveLocationSuccessEvent
 
+    private val _emptySavedLocationEvent: MutableLiveData<Event<Unit>> = MutableLiveData()
+    val emptySavedLocationEvent: LiveData<Event<Unit>> get() = _emptySavedLocationEvent
+
     fun searchPlaces() {
         location.value?.let { it ->
             addDisposable(locationRepository.searchPlaces(it)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ response ->
-                    _places.value = response.places.map { place ->
-                        place.toEntity()
-                    }
+                .subscribe({ responses ->
+                    _places.value = responses
                 }, {})
             )
         }
@@ -46,12 +48,8 @@ class LocationRegisterViewModel(private val locationRepository: LocationReposito
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                currentPlace.value = Place(
-                    it.addresses.first().roadAddress.buildingName,
-                    it.addresses.first().roadAddress.addressName,
-                    latitude,
-                    longitude
-                )
+                Log.d("adsfasdf", it.toString())
+                currentPlace.value = it
 
             }, {
                 when(it){
@@ -69,6 +67,7 @@ class LocationRegisterViewModel(private val locationRepository: LocationReposito
             .subscribe({
                 currentPlace.value = it
             }, {
+                _emptySavedLocationEvent.value = Event(Unit)
                 it.printStackTrace()
             })
         )
