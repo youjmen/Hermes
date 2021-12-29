@@ -28,6 +28,9 @@
         <activity
             android:name="com.jaemin.hermes.main.view.activity.MainActivity"
             android:exported="true"></activity>
+        <activity
+            android:name="com.jaemin.hermes.main.view.activity.LocationRegisterActivity"
+            android:exported="true"></activity>
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="6qjos1qwkr" />
