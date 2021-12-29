@@ -3,4 +3,8 @@
     <string name="input_book_title">책 제목을 입력하세요.</string>
     <string name="book_price">가격 : %d</string>
     <string name="empty_books">요청하신 책이 없습니다.</string>
+    <string name="register_location">위치를 등록해주세요</string>
+    <string name="location_register">위치 등록</string>
+    <string name="set_to_current_location">현재 위치로 설정</string>
+    <string name="register_selected_location">이 위치로 등록하기</string>
 </resources>

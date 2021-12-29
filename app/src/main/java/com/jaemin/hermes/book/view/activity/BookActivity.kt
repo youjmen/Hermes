@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.jaemin.hermes.R
 import com.jaemin.hermes.book.view.fragment.BookListFragment
 import com.jaemin.hermes.databinding.ActivityBookBinding
-import com.jaemin.hermes.main.activity.MainActivity
+import com.jaemin.hermes.main.view.activity.MainActivity
 
 class BookActivity : AppCompatActivity() {
     private lateinit var binding : ActivityBookBinding

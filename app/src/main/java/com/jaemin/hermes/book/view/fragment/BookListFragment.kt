@@ -10,7 +10,7 @@ import com.jaemin.hermes.base.EventObserver
 import com.jaemin.hermes.book.view.adapter.BookAdapter
 import com.jaemin.hermes.book.viewmodel.BookViewModel
 import com.jaemin.hermes.databinding.FragmentBookListBinding
-import com.jaemin.hermes.main.activity.MainActivity
+import com.jaemin.hermes.main.view.activity.MainActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
