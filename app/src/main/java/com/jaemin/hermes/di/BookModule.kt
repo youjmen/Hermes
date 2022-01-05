@@ -1,5 +1,6 @@
 package com.jaemin.hermes.di
 
+import com.jaemin.hermes.book.viewmodel.BookDetailViewModel
 import com.jaemin.hermes.book.viewmodel.BookViewModel
 import com.jaemin.hermes.datasource.remote.BookDataSource
 import com.jaemin.hermes.datasource.remote.BookDataSourceImpl
@@ -18,6 +19,7 @@ val bookModule = module {
     factory<BookDataSource> { BookDataSourceImpl(get()) }
     factory<BookRepository> { BookRepositoryImpl(get()) }
     viewModel { BookViewModel(get()) }
+    viewModel { BookDetailViewModel(get()) }
 
 
 
