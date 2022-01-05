@@ -1,5 +1,6 @@
 package com.jaemin.hermes.book.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.jaemin.hermes.base.BaseViewModel
@@ -34,11 +35,9 @@ class BookViewModel(private val bookRepository: BookRepository) : BaseViewModel(
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                if (it.item.isEmpty()){
+                _books.value = it
+                if (it.isEmpty()){
                     _booksEmptyEvent.value = Event(Unit)
-                }
-                else {
-                    _books.value = it.item.map { response -> response.toEntity() }
                 }
             },{
                 _booksErrorEvent.value = Event(Unit)

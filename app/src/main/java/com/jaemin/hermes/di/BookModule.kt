@@ -1,6 +1,9 @@
 package com.jaemin.hermes.di
 
+import com.jaemin.hermes.book.viewmodel.BookDetailViewModel
 import com.jaemin.hermes.book.viewmodel.BookViewModel
+import com.jaemin.hermes.datasource.remote.BookDataSource
+import com.jaemin.hermes.datasource.remote.BookDataSourceImpl
 import com.jaemin.hermes.remote.BookService
 import com.jaemin.hermes.repository.BookRepository
 import com.jaemin.hermes.repository.BookRepositoryImpl
@@ -13,8 +16,10 @@ val bookModule = module {
     fun provideBookService(retrofit: Retrofit): BookService =
         retrofit.create(BookService::class.java)
     single { provideBookService(get(named("book"))) }
+    factory<BookDataSource> { BookDataSourceImpl(get()) }
     factory<BookRepository> { BookRepositoryImpl(get()) }
     viewModel { BookViewModel(get()) }
+    viewModel { BookDetailViewModel(get()) }
 
 
 

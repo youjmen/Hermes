@@ -10,18 +10,26 @@ import com.jaemin.hermes.R
 import com.jaemin.hermes.databinding.ItemBookBinding
 import com.jaemin.hermes.entity.Book
 
-class BookAdapter : ListAdapter<Book, BookViewHolder>(BookDiffCallback()) {
+class BookAdapter(private val itemClickListener: OnItemClickListener) : ListAdapter<Book, BookViewHolder>(BookDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = ItemBookBinding.inflate(layoutInflater, parent, false)
-        return BookViewHolder(binding)
+
+        return BookViewHolder(binding).apply {
+            binding.root.setOnClickListener {
+                itemClickListener.onItemClick(currentList[adapterPosition].isbn)
+            }
+        }
     }
 
 
     override fun onBindViewHolder(holder: BookViewHolder, position: Int) {
         holder.bind(currentList[position])
 
+    }
+    interface OnItemClickListener {
+        fun onItemClick(item: String)
     }
 }
 

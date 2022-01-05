@@ -13,7 +13,9 @@ data class BookResponse(
                         @SerializedName("cover")
                         val cover : String,
                         @SerializedName("priceStandard")
-                        val price : Int
+                        val price : Int,
+                        @SerializedName("isbn13")
+                        val isbn : String
                         )
 fun BookResponse.toEntity() : Book =
-    Book(title, author, description, cover, price)
+    Book(title, author, description, cover, price, isbn)
