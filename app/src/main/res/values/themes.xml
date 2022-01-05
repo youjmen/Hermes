@@ -31,4 +31,8 @@
         <item name="android:fontFamily">@font/spoqahansansneoregular</item>
         <item name="android:includeFontPadding">false</item>
     </style>
+    <style name="BoldText" parent="android:TextAppearance">
+        <item name="android:fontFamily">@font/spoqahansansneobold</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
 </resources>
