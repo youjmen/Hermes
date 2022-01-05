@@ -1,7 +1,12 @@
 package com.jaemin.hermes.di
 
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.jaemin.hermes.BuildConfig
+import com.jaemin.hermes.datasource.remote.CorrectionJsonInterceptor
+import com.jaemin.hermes.datasource.remote.HtmlEntityInterceptor
 import com.jaemin.hermes.datasource.remote.KakaoInterceptor
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.core.qualifier.named
@@ -11,9 +16,12 @@ import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 val networkModule = module {
-    single(named("book")) { provideBookRetrofit(get(named("general"))) }
+    single(named("book")) { provideBookRetrofit(get(named("bookClient"))) }
     single(named("location")) { provideLocationRetrofit(get(named("location"))) }
+    single { CorrectionJsonInterceptor()  }
+    single { HtmlEntityInterceptor() }
     single { KakaoInterceptor() }
+    single(named("bookClient")) { provideBookOkHttpClient(get(),get(),get()) }
     single(named("general")) { provideOkHttpClient(get()) }
     single(named("location")) { provideLocationOkHttpClient(get(),get()) }
     single { provideLoggingInterceptor() }
@@ -33,6 +41,13 @@ fun provideLocationRetrofit(okHttpClient: OkHttpClient): Retrofit {
 }
 fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
     return OkHttpClient.Builder()
+        .addInterceptor(loggingInterceptor)
+        .build()
+}
+fun provideBookOkHttpClient(htmlEntityInterceptor: HtmlEntityInterceptor,correctionInterceptor : CorrectionJsonInterceptor,loggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
+    return OkHttpClient.Builder()
+        .addInterceptor(correctionInterceptor)
+        .addInterceptor(htmlEntityInterceptor)
         .addInterceptor(loggingInterceptor)
         .build()
 }
