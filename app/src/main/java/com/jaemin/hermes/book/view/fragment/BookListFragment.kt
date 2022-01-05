@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import com.jaemin.hermes.R
 import com.jaemin.hermes.base.BaseViewBindingFragment
 import com.jaemin.hermes.base.EventObserver
 import com.jaemin.hermes.book.view.adapter.BookAdapter
@@ -14,7 +15,7 @@ import com.jaemin.hermes.main.view.activity.MainActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class BookListFragment : BaseViewBindingFragment<FragmentBookListBinding>() {
+class BookListFragment : BaseViewBindingFragment<FragmentBookListBinding>(), BookAdapter.OnItemClickListener {
     private val viewModel : BookViewModel by viewModel()
     private lateinit var bookAdapter: BookAdapter
     override fun setViewBinding(
@@ -26,13 +27,13 @@ class BookListFragment : BaseViewBindingFragment<FragmentBookListBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        bookAdapter = BookAdapter()
+        bookAdapter = BookAdapter(this)
         binding.rvBooks.adapter = bookAdapter
 
         arguments?.getString(MainActivity.BOOK_NAME)?.let {
             viewModel.searchBooks(it)
             binding.etSearchBooks.setText(it)
+            arguments?.remove(MainActivity.BOOK_NAME)
         }
         binding.etSearchBooks.setOnEditorActionListener { p0, actionId, p2 ->
             if(actionId == EditorInfo.IME_ACTION_SEARCH){
@@ -70,6 +71,25 @@ class BookListFragment : BaseViewBindingFragment<FragmentBookListBinding>() {
             })
         }
 
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+    }
+
+    override fun onItemClick(item: String) {
+        requireActivity().supportFragmentManager.beginTransaction()
+            .setCustomAnimations(R.anim.slide_in, R.anim.fade_out,R.anim.fade_in,R.anim.fade_out)
+            .replace(R.id.fcv_book, BookDetailFragment().apply {
+                val bundle = Bundle()
+                bundle.putString(ISBN, item)
+                arguments = bundle
+            })
+            .addToBackStack(null)
+            .commit()
+    }
+    companion object{
+        const val ISBN = "ISBN"
     }
 
 
