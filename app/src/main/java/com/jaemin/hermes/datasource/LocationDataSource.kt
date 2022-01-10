@@ -1,4 +1,4 @@
-package com.jaemin.hermes.datasource.remote
+package com.jaemin.hermes.datasource
 
 import com.jaemin.hermes.entity.Place
 import com.jaemin.hermes.response.AddressesResponse
@@ -12,6 +12,8 @@ interface LocationDataSource {
     fun searchNearbyPlaces(query : String, longitude : Double, latitude : Double) : Single<PlacesResponse>
 
     fun searchPlaceByAddress(longitude : Double, latitude : Double) : Single<AddressesResponse>
+
+    fun searchBookstoreByAddressWithRadius(longitude : Double, latitude : Double, radius : Int) : Single<PlacesResponse>
 
     fun insertCurrentLocation(place : Place) : Completable
 
