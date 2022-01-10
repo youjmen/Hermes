@@ -13,7 +13,7 @@ class HermesApplication : Application() {
         startKoin{
             androidLogger(Level.ERROR)
             androidContext(this@HermesApplication)
-            modules(listOf(dbModule, networkModule, bookModule, locationModule, mainModule))
+            modules(listOf(dbModule, networkModule, bookModule, locationModule, mainModule, bookstoreModule))
         }
     }
 }
