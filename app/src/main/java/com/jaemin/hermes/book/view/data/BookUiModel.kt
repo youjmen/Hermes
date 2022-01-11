@@ -12,5 +12,3 @@ data class BookUiModel(val title : String,
                        val price : Int,
                        val isbn : String) : Parcelable
 
-fun Book.toUiModel() : BookUiModel =
-    BookUiModel(title, author, description, cover, price, isbn)

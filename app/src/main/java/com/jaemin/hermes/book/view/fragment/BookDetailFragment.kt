@@ -13,6 +13,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.jaemin.hermes.R
 import com.jaemin.hermes.base.BaseViewBindingFragment
+import com.jaemin.hermes.book.view.data.BookUiModel
 import com.jaemin.hermes.book.view.data.toUiModel
 import com.jaemin.hermes.book.viewmodel.BookDetailViewModel
 import com.jaemin.hermes.databinding.FragmentBookDetailBinding
@@ -40,7 +41,9 @@ class BookDetailFragment : BaseViewBindingFragment<FragmentBookDetailBinding>() 
                 .setCustomAnimations(R.anim.slide_in, R.anim.fade_out,R.anim.fade_in,R.anim.slide_out)
                 .replace(R.id.fcv_book, CheckStockFragment().apply {
                     val bundle = Bundle()
-                    bundle.putParcelable(BOOK_INFORMATION, viewModel.bookInformation.value?.toUiModel())
+                    bundle.putParcelable(BOOK_INFORMATION, viewModel.bookInformation.value?.run {
+                        BookUiModel(title, author, description, cover, price, isbn)
+                    })
                     arguments = Bundle()
 
                 })
