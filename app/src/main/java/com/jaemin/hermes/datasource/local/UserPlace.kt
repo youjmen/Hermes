@@ -16,12 +16,10 @@ data class UserPlace(
     @ColumnInfo(name = "longitude")
     val longitude : String,
     @ColumnInfo(name = "latitude")
-    val latitude : String,
-
-    )
+    val latitude : String)
 
 fun UserPlace.toEntity() : Place =
-    Place(name, roadAddress, latitude.toDouble(), longitude.toDouble(),)
+    Place(name, roadAddress, latitude.toDouble(), longitude.toDouble(), "")
 
 fun Place.toDBData() : UserPlace =
     UserPlace(name = name, roadAddress = roadAddress, latitude = latitude.toString(), longitude = longitude.toString())

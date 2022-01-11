@@ -1,12 +1,9 @@
 package com.jaemin.hermes.di
 
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.jaemin.hermes.BuildConfig
 import com.jaemin.hermes.datasource.remote.CorrectionJsonInterceptor
 import com.jaemin.hermes.datasource.remote.HtmlEntityInterceptor
 import com.jaemin.hermes.datasource.remote.KakaoInterceptor
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.core.qualifier.named
@@ -44,7 +41,7 @@ fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClien
         .addInterceptor(loggingInterceptor)
         .build()
 }
-fun provideBookOkHttpClient(htmlEntityInterceptor: HtmlEntityInterceptor,correctionInterceptor : CorrectionJsonInterceptor,loggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
+fun provideBookOkHttpClient(htmlEntityInterceptor: HtmlEntityInterceptor, correctionInterceptor : CorrectionJsonInterceptor, loggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
     return OkHttpClient.Builder()
         .addInterceptor(correctionInterceptor)
         .addInterceptor(htmlEntityInterceptor)

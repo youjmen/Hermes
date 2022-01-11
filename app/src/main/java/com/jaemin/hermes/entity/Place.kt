@@ -5,5 +5,6 @@ data class Place(
     val name : String,
     val roadAddress : String,
     val latitude : Double,
-    val longitude : Double
+    val longitude : Double,
+    val phoneNumber : String
 )

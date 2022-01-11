@@ -13,6 +13,8 @@ interface LocationDataSource {
 
     fun searchPlaceByAddress(longitude : Double, latitude : Double) : Single<AddressesResponse>
 
+    fun searchBookstoreByAddressWithRadius(longitude : Double, latitude : Double, radius : Int) : Single<PlacesResponse>
+
     fun insertCurrentLocation(place : Place) : Completable
 
     fun getCurrentLocation() : Single<Place>

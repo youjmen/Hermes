@@ -17,4 +17,6 @@ interface LocationRepository {
 
     fun getCurrentLocation() : Single<Place>
 
+    fun searchBookstoreByAddressWithRadius(longitude : Double, latitude : Double, radius : Int) : Single<List<Place>>
+
 }

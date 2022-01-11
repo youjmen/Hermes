@@ -29,6 +29,14 @@ class LocationDataSourceImpl(private val locationService: LocationService, priva
     ): Single<AddressesResponse> =
         locationService.searchPlaceByAddress(longitude.toString(), latitude.toString())
 
+
+    override fun searchBookstoreByAddressWithRadius(
+        longitude: Double,
+        latitude: Double,
+        radius: Int
+    ): Single<PlacesResponse> =
+        locationService.searchNearbyPlaceWithRadius("서점", longitude.toString(), latitude.toString(), radius)
+
     override fun insertCurrentLocation(place: Place): Completable {
         return userPlaceDao.insertUserPlace(place.toDBData())
 

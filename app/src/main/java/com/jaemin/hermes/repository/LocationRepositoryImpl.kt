@@ -26,12 +26,22 @@ class LocationRepositoryImpl(private val locationDataSource: LocationDataSource)
         locationDataSource.searchPlaceByAddress(longitude, latitude)
             .map {
                 if(it.addresses.first().roadAddress == null){
-                    Place(it.addresses.first().lotNumberAddress!!.addressName, it.addresses.first().lotNumberAddress!!.addressName, latitude, longitude)
+                    Place(it.addresses.first().lotNumberAddress!!.addressName, it.addresses.first().lotNumberAddress!!.addressName, latitude, longitude, "")
                 }
                 else{
-                    Place(it.addresses.first().roadAddress!!.addressName, it.addresses.first().roadAddress!!.addressName, latitude, longitude)
+                    Place(it.addresses.first().roadAddress!!.addressName, it.addresses.first().roadAddress!!.addressName, latitude, longitude, "")
 
                 }
+            }
+
+    override fun searchBookstoreByAddressWithRadius(
+        longitude: Double,
+        latitude: Double,
+        radius: Int
+    ): Single<List<Place>> =
+        locationDataSource.searchBookstoreByAddressWithRadius(longitude, latitude, radius)
+            .map { placesResponse ->
+                placesResponse.places.map { placeResponse-> placeResponse.toEntity() }
             }
 
     override fun insertCurrentLocation(place: Place): Completable =
