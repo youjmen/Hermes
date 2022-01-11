@@ -136,8 +136,6 @@ class CheckStockFragment : BaseViewBindingFragment<FragmentCheckStockBinding>(),
             bookstoresInformation[index].let {
                 binding.clBookstoreInformation.animate()
                     .translationY(-binding.clBookstoreInformation.height.toFloat())
-                    .alpha(1.0f)
-                    .setListener(null)
                 binding.tvBookstoreName.text = it.name
                 binding.tvBookstoreAddress.text = it.roadAddress
                 binding.tvBookstorePhone.text = it.phoneNumber
