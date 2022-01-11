@@ -18,4 +18,4 @@ data class BookResponse(
                         val isbn : String
                         )
 fun BookResponse.toEntity() : Book =
-    Book(title, author, description, cover, price, isbn)
+    Book(title, author, description, cover.replace("coversum","cover500"), price, isbn)

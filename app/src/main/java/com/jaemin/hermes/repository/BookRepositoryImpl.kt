@@ -17,4 +17,21 @@ class BookRepositoryImpl(private val bookDataSource: BookDataSource) : BookRepos
             it.item.first().toEntity()
         }
 
+    override fun getBestSellers(): Single<List<Book>> =
+        bookDataSource.getBestSellers().map {
+            it.item.map { response -> response.toEntity() }
+        }
+
+    override fun getNewSpecialBooks(): Single<List<Book>> =
+        bookDataSource.getNewSpecialBooks().map {
+            it.item.map { response -> response.toEntity() }
+        }
+
+
+    override fun getNewBooks(): Single<List<Book>> =
+        bookDataSource.getNewBooks().map {
+            it.item.map { response -> response.toEntity() }
+        }
+
+
 }

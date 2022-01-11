@@ -8,4 +8,10 @@ interface BookDataSource {
 
     fun getBookInformation(isbn : String) : Single<BooksResponse>
 
+    fun getBestSellers() : Single<BooksResponse>
+
+    fun getNewSpecialBooks() : Single<BooksResponse>
+
+    fun getNewBooks() : Single<BooksResponse>
+
 }

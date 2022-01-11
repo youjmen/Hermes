@@ -29,6 +29,7 @@ class LocationDataSourceImpl(private val locationService: LocationService, priva
     ): Single<AddressesResponse> =
         locationService.searchPlaceByAddress(longitude.toString(), latitude.toString())
 
+
     override fun searchBookstoreByAddressWithRadius(
         longitude: Double,
         latitude: Double,

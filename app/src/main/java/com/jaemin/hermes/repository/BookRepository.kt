@@ -8,4 +8,9 @@ interface BookRepository {
 
     fun getBookInformation(isbn : String) : Single<Book>
 
+    fun getBestSellers() : Single<List<Book>>
+
+    fun getNewSpecialBooks() : Single<List<Book>>
+
+    fun getNewBooks() : Single<List<Book>>
 }

@@ -6,6 +6,7 @@ import com.jaemin.hermes.R
 import com.jaemin.hermes.book.view.fragment.BookListFragment
 import com.jaemin.hermes.databinding.ActivityBookBinding
 import com.jaemin.hermes.main.view.activity.MainActivity
+import com.jaemin.hermes.main.view.fragment.MainFragment
 
 class BookActivity : AppCompatActivity() {
     private lateinit var binding : ActivityBookBinding
@@ -15,7 +16,7 @@ class BookActivity : AppCompatActivity() {
         setContentView(binding.root)
         supportFragmentManager.beginTransaction().replace(R.id.fcv_book,BookListFragment().apply {
             arguments = Bundle().apply {
-                putString(MainActivity.BOOK_NAME, intent.getStringExtra(MainActivity.BOOK_NAME))
+                putString(MainFragment.BOOK_NAME, intent.getStringExtra(MainFragment.BOOK_NAME))
             }
         }).commit()
     }

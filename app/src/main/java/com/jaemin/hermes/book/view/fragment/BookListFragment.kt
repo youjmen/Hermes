@@ -12,6 +12,7 @@ import com.jaemin.hermes.book.view.adapter.BookAdapter
 import com.jaemin.hermes.book.viewmodel.BookViewModel
 import com.jaemin.hermes.databinding.FragmentBookListBinding
 import com.jaemin.hermes.main.view.activity.MainActivity
+import com.jaemin.hermes.main.view.fragment.MainFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -30,10 +31,10 @@ class BookListFragment : BaseViewBindingFragment<FragmentBookListBinding>(), Boo
         bookAdapter = BookAdapter(this)
         binding.rvBooks.adapter = bookAdapter
 
-        arguments?.getString(MainActivity.BOOK_NAME)?.let {
+        arguments?.getString(MainFragment.BOOK_NAME)?.let {
             viewModel.searchBooks(it)
             binding.etSearchBooks.setText(it)
-            arguments?.remove(MainActivity.BOOK_NAME)
+            arguments?.remove(MainFragment.BOOK_NAME)
         }
         binding.etSearchBooks.setOnEditorActionListener { p0, actionId, p2 ->
             if(actionId == EditorInfo.IME_ACTION_SEARCH){
