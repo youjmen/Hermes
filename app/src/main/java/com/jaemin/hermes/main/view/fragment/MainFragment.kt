@@ -50,14 +50,16 @@ class MainFragment : BaseViewBindingFragment<FragmentMainBinding>(), BookThumbna
             }
             bestSellers.observe(viewLifecycleOwner){
                 bestSellerAdapter.submitList(it)
+                binding.srlMain.isRefreshing = false
             }
             newBooks.observe(viewLifecycleOwner){
                 newBooksAdapter.submitList(it)
+                binding.srlMain.isRefreshing = false
             }
             newSpecialBooks.observe(viewLifecycleOwner){
                 specialNewBooksAdapter.submitList(it)
                 binding.vpNewSpecialBooks.currentItem = 1
-
+                binding.srlMain.isRefreshing = false
             }
         }
     }
@@ -106,6 +108,11 @@ class MainFragment : BaseViewBindingFragment<FragmentMainBinding>(), BookThumbna
             clLocation.setOnClickListener {
                 startActivity(Intent(requireActivity(), LocationRegisterActivity::class.java))
             }
+            srlMain.setOnRefreshListener {
+                viewModel.getNewSpecialBooks()
+                viewModel.getBestSellers()
+                viewModel.getNewBooks()
+            }
         }
         setSpecialNewBooksViewPager()
     }
@@ -120,11 +127,6 @@ class MainFragment : BaseViewBindingFragment<FragmentMainBinding>(), BookThumbna
 
         binding.vpNewSpecialBooks.offscreenPageLimit = 2
         binding.vpNewSpecialBooks.setPageTransformer(ScaleViewPagerTransformer(offsetPx))
-
-//            .{page, position->
-//            page.translationX = position * -offsetPx
-//
-//        }
     }
 
 }
