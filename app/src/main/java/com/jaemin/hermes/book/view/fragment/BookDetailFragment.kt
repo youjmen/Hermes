@@ -14,7 +14,6 @@ import com.bumptech.glide.request.target.Target
 import com.jaemin.hermes.R
 import com.jaemin.hermes.base.BaseViewBindingFragment
 import com.jaemin.hermes.book.view.data.BookUiModel
-import com.jaemin.hermes.book.view.data.toUiModel
 import com.jaemin.hermes.book.viewmodel.BookDetailViewModel
 import com.jaemin.hermes.databinding.FragmentBookDetailBinding
 import com.jaemin.hermes.entity.Book
