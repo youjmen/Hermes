@@ -19,7 +19,7 @@
 
     <TextView
         android:id="@+id/tv_book_name"
-        style="@style/RegularText"
+        style="@style/BoldText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ellipsize="end"
