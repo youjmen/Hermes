@@ -1,4 +1,4 @@
-package com.jaemin.hermes.remote
+package com.jaemin.hermes.datasource.remote
 
 import com.jaemin.hermes.response.AddressesResponse
 import com.jaemin.hermes.response.PlacesResponse
@@ -12,6 +12,9 @@ interface LocationService {
 
     @GET("/v2/local/search/keyword.json")
     fun searchNearbyPlace(@Query("query") query : String,@Query("x") longitude : String,@Query("y") latitude : String) : Single<PlacesResponse>
+
+    @GET("/v2/local/search/keyword.json")
+    fun searchNearbyPlaceWithRadius(@Query("query") query : String,@Query("x") longitude : String,@Query("y") latitude : String, @Query("radius") radius : Int) : Single<PlacesResponse>
 
     @GET("/v2/local/geo/coord2address.json")
     fun searchPlaceByAddress(@Query("x") longitude : String,@Query("y") latitude : String) : Single<AddressesResponse>

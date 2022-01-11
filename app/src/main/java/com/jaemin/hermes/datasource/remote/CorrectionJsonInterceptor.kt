@@ -1,14 +1,9 @@
 package com.jaemin.hermes.datasource.remote
 
-import android.util.Log
-import com.google.gson.Gson
-import com.google.gson.JsonObject
 import okhttp3.Interceptor
 import okhttp3.MediaType
 import okhttp3.Response
-import okhttp3.ResponseBody
 import okhttp3.ResponseBody.Companion.toResponseBody
-import org.json.JSONObject
 
 class CorrectionJsonInterceptor : Interceptor{
     override fun intercept(chain: Interceptor.Chain): Response {

@@ -13,6 +13,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.jaemin.hermes.R
 import com.jaemin.hermes.base.BaseViewBindingFragment
+import com.jaemin.hermes.book.view.data.BookUiModel
 import com.jaemin.hermes.book.viewmodel.BookDetailViewModel
 import com.jaemin.hermes.databinding.FragmentBookDetailBinding
 import com.jaemin.hermes.entity.Book
@@ -32,6 +33,21 @@ class BookDetailFragment : BaseViewBindingFragment<FragmentBookDetailBinding>() 
         super.onViewCreated(view, savedInstanceState)
         arguments?.getString(BookListFragment.ISBN)?.let {
             viewModel.getBookInformation(it)
+        }
+        binding.clCheckStock.setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .addToBackStack(null)
+                .setCustomAnimations(R.anim.slide_in, R.anim.fade_out,R.anim.fade_in,R.anim.slide_out)
+                .replace(R.id.fcv_book, CheckStockFragment().apply {
+                    val bundle = Bundle()
+                    bundle.putParcelable(BOOK_INFORMATION, viewModel.bookInformation.value?.run {
+                        BookUiModel(title, author, description, cover, price, isbn)
+                    })
+                    arguments = Bundle()
+
+                })
+                .commit()
+
         }
         with(viewModel) {
             bookInformation.observe(viewLifecycleOwner) {
@@ -80,6 +96,9 @@ class BookDetailFragment : BaseViewBindingFragment<FragmentBookDetailBinding>() 
         binding.tvDescription.text = book.description
         binding.tvPrice.text = getString(R.string.book_price_detail, book.price)
 
+    }
+    companion object{
+        private const val BOOK_INFORMATION = "bookInformation"
     }
 
 

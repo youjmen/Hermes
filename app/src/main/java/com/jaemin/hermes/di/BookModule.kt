@@ -2,9 +2,9 @@ package com.jaemin.hermes.di
 
 import com.jaemin.hermes.book.viewmodel.BookDetailViewModel
 import com.jaemin.hermes.book.viewmodel.BookViewModel
-import com.jaemin.hermes.datasource.remote.BookDataSource
-import com.jaemin.hermes.datasource.remote.BookDataSourceImpl
-import com.jaemin.hermes.remote.BookService
+import com.jaemin.hermes.datasource.BookDataSource
+import com.jaemin.hermes.datasource.BookDataSourceImpl
+import com.jaemin.hermes.datasource.remote.BookService
 import com.jaemin.hermes.repository.BookRepository
 import com.jaemin.hermes.repository.BookRepositoryImpl
 import org.koin.androidx.viewmodel.dsl.viewModel
