@@ -1,4 +1,4 @@
-package com.jaemin.hermes.datasource.remote
+package com.jaemin.hermes.datasource
 
 import com.jaemin.hermes.response.BooksResponse
 import io.reactivex.rxjava3.core.Single

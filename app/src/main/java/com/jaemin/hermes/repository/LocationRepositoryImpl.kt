@@ -1,11 +1,7 @@
 package com.jaemin.hermes.repository
 
-import android.util.Log
-import com.jaemin.hermes.datasource.remote.LocationDataSource
+import com.jaemin.hermes.datasource.LocationDataSource
 import com.jaemin.hermes.entity.Place
-import com.jaemin.hermes.exception.EmptyPlaceException
-import com.jaemin.hermes.response.AddressesResponse
-import com.jaemin.hermes.response.PlacesResponse
 import com.jaemin.hermes.response.toEntity
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single

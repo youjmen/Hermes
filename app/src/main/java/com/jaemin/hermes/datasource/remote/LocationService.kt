@@ -1,4 +1,4 @@
-package com.jaemin.hermes.remote
+package com.jaemin.hermes.datasource.remote
 
 import com.jaemin.hermes.response.AddressesResponse
 import com.jaemin.hermes.response.PlacesResponse

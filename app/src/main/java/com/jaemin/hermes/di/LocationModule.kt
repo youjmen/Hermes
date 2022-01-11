@@ -1,9 +1,9 @@
 package com.jaemin.hermes.di
 
-import com.jaemin.hermes.datasource.remote.LocationDataSource
-import com.jaemin.hermes.datasource.remote.LocationDataSourceImpl
+import com.jaemin.hermes.datasource.LocationDataSource
+import com.jaemin.hermes.datasource.LocationDataSourceImpl
 import com.jaemin.hermes.main.viewmodel.LocationRegisterViewModel
-import com.jaemin.hermes.remote.LocationService
+import com.jaemin.hermes.datasource.remote.LocationService
 import com.jaemin.hermes.repository.LocationRepository
 import com.jaemin.hermes.repository.LocationRepositoryImpl
 import org.koin.androidx.viewmodel.dsl.viewModel

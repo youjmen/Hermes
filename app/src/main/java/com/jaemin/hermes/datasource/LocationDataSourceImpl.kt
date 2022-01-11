@@ -1,18 +1,18 @@
-package com.jaemin.hermes.datasource.remote
+package com.jaemin.hermes.datasource
 
 import android.util.Log
-import com.jaemin.hermes.datasource.local.UserPlace
 import com.jaemin.hermes.datasource.local.UserPlaceDao
 import com.jaemin.hermes.datasource.local.toDBData
 import com.jaemin.hermes.datasource.local.toEntity
 import com.jaemin.hermes.entity.Place
-import com.jaemin.hermes.remote.LocationService
+import com.jaemin.hermes.datasource.remote.LocationService
 import com.jaemin.hermes.response.AddressesResponse
 import com.jaemin.hermes.response.PlacesResponse
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
 
-class LocationDataSourceImpl(private val locationService: LocationService, private val userPlaceDao: UserPlaceDao)  : LocationDataSource {
+class LocationDataSourceImpl(private val locationService: LocationService, private val userPlaceDao: UserPlaceDao)  :
+    LocationDataSource {
     override fun searchPlaces(query: String): Single<PlacesResponse> =
         locationService.searchPlace(query)
 
