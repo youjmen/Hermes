@@ -18,7 +18,7 @@ class BookAdapter(private val itemClickListener: OnItemClickListener) : ListAdap
 
         return BookViewHolder(binding).apply {
             binding.root.setOnClickListener {
-                itemClickListener.onItemClick(currentList[adapterPosition].isbn)
+                itemClickListener.onItemClick(currentList[bindingAdapterPosition].isbn)
             }
         }
     }
