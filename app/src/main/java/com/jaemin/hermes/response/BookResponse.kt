@@ -15,7 +15,15 @@ data class BookResponse(
                         @SerializedName("priceStandard")
                         val price : Int,
                         @SerializedName("isbn13")
-                        val isbn : String
+                        val isbn13 : String,
+                        @SerializedName("isbn")
+                        val isbn : String,
                         )
-fun BookResponse.toEntity() : Book =
-    Book(title, author, description, cover.replace("coversum","cover500"), price, isbn)
+fun BookResponse.toEntity() : Book {
+    return if (isbn13 == "") {
+        Book(title, author, description, cover.replace("coversum", "cover500"), price, isbn)
+    }
+    else{
+        Book(title, author, description, cover.replace("coversum", "cover500"), price, isbn13)
+    }
+}
