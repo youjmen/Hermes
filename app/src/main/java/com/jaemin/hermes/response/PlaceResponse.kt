@@ -1,6 +1,7 @@
 package com.jaemin.hermes.response
 
 import com.google.gson.annotations.SerializedName
+import com.jaemin.hermes.entity.Bookstore
 import com.jaemin.hermes.entity.Place
 
 data class PlaceResponse(
@@ -18,3 +19,6 @@ data class PlaceResponse(
 
 fun PlaceResponse.toEntity() : Place =
     Place(name, roadAddress, latitude.toDouble(), longitude.toDouble(), phoneNumber)
+
+fun PlaceResponse.toBookstore() : Bookstore =
+    Bookstore(name, roadAddress, latitude.toDouble(), longitude.toDouble(), phoneNumber)
