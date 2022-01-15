@@ -11,6 +11,8 @@
     <string name="book_introduction">작품 소개</string>
     <string name="check_stock">재고 확인</string>
     <string name="home">홈</string>
+    <string name="unknown_stocks">재고 확인 불가</string>
+    <string name="stocks">재고 : %s권</string>
     <string name="find_bookstore">서점 찾기</string>
     <string name="new_books">신간 도서</string>
     <string name="bestsellers">베스트셀러</string>
