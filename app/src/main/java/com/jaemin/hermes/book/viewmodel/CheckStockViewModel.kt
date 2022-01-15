@@ -5,21 +5,26 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.jaemin.hermes.base.BaseViewModel
 import com.jaemin.hermes.base.Event
+import com.jaemin.hermes.entity.Bookstore
 import com.jaemin.hermes.entity.Place
 import com.jaemin.hermes.exception.EmptyPlaceException
+import com.jaemin.hermes.repository.BookRepository
 import com.jaemin.hermes.repository.LocationRepository
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
 
-class CheckStockViewModel(private val locationRepository: LocationRepository) : BaseViewModel() {
+class CheckStockViewModel(
+    private val locationRepository: LocationRepository,
+    private val bookRepository: BookRepository
+) : BaseViewModel() {
 
     val currentPlace: MutableLiveData<Place> = MutableLiveData()
 
     private val _emptySavedLocationEvent: MutableLiveData<Event<Unit>> = MutableLiveData()
     val emptySavedLocationEvent: LiveData<Event<Unit>> get() = _emptySavedLocationEvent
 
-    private val _bookstores: MutableLiveData<List<Place>> = MutableLiveData()
-    val bookstores: LiveData<List<Place>> get() = _bookstores
+    private val _bookstores: MutableLiveData<List<Bookstore>> = MutableLiveData()
+    val bookstores: LiveData<List<Bookstore>> get() = _bookstores
 
     fun searchCurrentLocationPlace(longitude: Double, latitude: Double) {
         addDisposable(
@@ -66,6 +71,22 @@ class CheckStockViewModel(private val locationRepository: LocationRepository) : 
                     it.printStackTrace()
                 })
         )
+
+    }
+
+    fun getBookStocks(isbn: String) {
+        _bookstores.value?.let {
+            addDisposable(
+                bookRepository.getBookStocks(isbn, it)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({
+                        _bookstores.value = _bookstores.value
+                    }, {
+
+                    })
+            )
+
+        }
 
     }
 }

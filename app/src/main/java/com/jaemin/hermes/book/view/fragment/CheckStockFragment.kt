@@ -3,6 +3,7 @@ package com.jaemin.hermes.book.view.fragment
 import android.Manifest
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
 import android.os.Looper
@@ -13,6 +14,7 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import com.google.android.gms.location.*
 import com.jaemin.hermes.R
 import com.jaemin.hermes.base.BaseViewBindingFragment
@@ -21,11 +23,15 @@ import com.jaemin.hermes.book.view.data.BookUiModel
 import com.jaemin.hermes.book.viewmodel.CheckStockViewModel
 import com.jaemin.hermes.databinding.FragmentCheckStockBinding
 import com.jaemin.hermes.entity.Book
+import com.jaemin.hermes.entity.Bookstore
 import com.jaemin.hermes.entity.Place
 import com.jaemin.hermes.util.LocationUtil
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
+import com.naver.maps.map.overlay.InfoWindow
 import com.naver.maps.map.overlay.Marker
+import com.naver.maps.map.overlay.OverlayImage
+import com.naver.maps.map.util.MarkerIcons
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -36,7 +42,7 @@ class CheckStockFragment : BaseViewBindingFragment<FragmentCheckStockBinding>(),
     private lateinit var naverMap: NaverMap
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var marker: Marker
-    private val bookstoresInformation : MutableList<Place> = mutableListOf()
+    val markers = mutableListOf<Marker>()
 
 
     private val locationCallback = object : LocationCallback() {
@@ -106,16 +112,22 @@ class CheckStockFragment : BaseViewBindingFragment<FragmentCheckStockBinding>(),
         with(viewModel){
             currentPlace.observe(viewLifecycleOwner) {
                 setCurrentLocation(it)
-                searchBookstoreByAddressWithRadius(it.longitude, it.latitude, 20000)
+                searchBookstoreByAddressWithRadius(it.longitude, it.latitude, 5000)
             }
             emptySavedLocationEvent.observe(viewLifecycleOwner, EventObserver {
                 setCurrentLocationToMap()
 
             })
             bookstores.observe(viewLifecycleOwner){
+                markers.forEach { marker->
+                    marker.map = null
+                }
                 it.forEachIndexed { index , place->
-                    bookstoresInformation.add(place)
                     setBookstoreMarker(place, index)
+                }
+                (arguments?.getParcelable(BookDetailFragment.BOOK_INFORMATION) as? BookUiModel)?.let { book->
+                    viewModel.getBookStocks(book.isbn)
+                    arguments?.remove(BookDetailFragment.BOOK_INFORMATION)
                 }
             }
         }
@@ -130,18 +142,42 @@ class CheckStockFragment : BaseViewBindingFragment<FragmentCheckStockBinding>(),
         marker.captionText = item.name
 
     }
-    private fun setBookstoreMarker(item: Place, index : Int) {
-        setMarker(item)
+    private fun setBookstoreMarker(item: Bookstore, index : Int) {
+
+        setMarker(Place(item.name,item.roadAddress,item.latitude,item.longitude,item.phoneNumber))
+        marker.icon = MarkerIcons.BLACK
+        marker.iconTintColor = ContextCompat.getColor(requireContext(),R.color.calmingCoral)
+        if (!item.bookStock.isNullOrEmpty()) {
+            val infoWindow = InfoWindow()
+            infoWindow.adapter = object : InfoWindow.DefaultTextAdapter(requireContext()) {
+                override fun getText(p0: InfoWindow): CharSequence {
+                    return item.bookStock!!
+                }
+
+            }
+            infoWindow.open(marker)
+        }
         marker.setOnClickListener {
-            bookstoresInformation[index].let {
+            viewModel.bookstores.value?.get(index)?.let {
+
                 binding.clBookstoreInformation.animate()
                     .translationY(-binding.clBookstoreInformation.height.toFloat())
                 binding.tvBookstoreName.text = it.name
                 binding.tvBookstoreAddress.text = it.roadAddress
                 binding.tvBookstorePhone.text = it.phoneNumber
+
+                if (it.bookStock.isNullOrEmpty()){
+                    binding.tvStocks.text = getString(R.string.unknown_stocks)
+                    binding.tvStocks.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
+                } else{
+                    binding.tvStocks.text = getString(R.string.stocks, it.bookStock)
+                    binding.tvStocks.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+
+                }
             }
             true
         }
+        markers.add(marker)
     }
 
     private fun requestLocationPermission() {
