@@ -1,7 +1,9 @@
 package com.jaemin.hermes.repository
 
 import com.jaemin.hermes.datasource.LocationDataSource
+import com.jaemin.hermes.entity.Bookstore
 import com.jaemin.hermes.entity.Place
+import com.jaemin.hermes.response.toBookstore
 import com.jaemin.hermes.response.toEntity
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
@@ -38,10 +40,10 @@ class LocationRepositoryImpl(private val locationDataSource: LocationDataSource)
         longitude: Double,
         latitude: Double,
         radius: Int
-    ): Single<List<Place>> =
+    ): Single<List<Bookstore>> =
         locationDataSource.searchBookstoreByAddressWithRadius(longitude, latitude, radius)
             .map { placesResponse ->
-                placesResponse.places.map { placeResponse-> placeResponse.toEntity() }
+                placesResponse.places.map { placeResponse-> placeResponse.toBookstore() }
             }
 
     override fun insertCurrentLocation(place: Place): Completable =

@@ -35,18 +35,28 @@ class BookDetailFragment : BaseViewBindingFragment<FragmentBookDetailBinding>() 
             viewModel.getBookInformation(it)
         }
         binding.clCheckStock.setOnClickListener {
-            requireActivity().supportFragmentManager.beginTransaction()
-                .addToBackStack(null)
-                .setCustomAnimations(R.anim.slide_in, R.anim.fade_out,R.anim.fade_in,R.anim.slide_out)
-                .replace(R.id.fcv_book, CheckStockFragment().apply {
-                    val bundle = Bundle()
-                    bundle.putParcelable(BOOK_INFORMATION, viewModel.bookInformation.value?.run {
-                        BookUiModel(title, author, description, cover, price, isbn)
-                    })
-                    arguments = Bundle()
+            val fcvId = arguments?.getInt(FRAGMENT_CONTAINER_VIEW)
+            fcvId?.let {
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .addToBackStack(null)
+                    .setCustomAnimations(
+                        R.anim.slide_in,
+                        R.anim.fade_out,
+                        R.anim.fade_in,
+                        R.anim.slide_out
+                    )
+                    .replace(it, CheckStockFragment().apply {
+                        val bundle = Bundle()
+                        bundle.putParcelable(
+                            BOOK_INFORMATION,
+                            viewModel.bookInformation.value?.run {
+                                BookUiModel(title, author, description, cover, price, isbn)
+                            })
+                        arguments = bundle
 
-                })
-                .commit()
+                    })
+                    .commit()
+            }
 
         }
         with(viewModel) {
@@ -98,7 +108,8 @@ class BookDetailFragment : BaseViewBindingFragment<FragmentBookDetailBinding>() 
 
     }
     companion object{
-        private const val BOOK_INFORMATION = "bookInformation"
+        const val BOOK_INFORMATION = "bookInformation"
+        const val FRAGMENT_CONTAINER_VIEW = "FRAGMENT_CONTAINER_VIEW"
     }
 
 

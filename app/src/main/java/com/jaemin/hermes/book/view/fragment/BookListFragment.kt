@@ -9,9 +9,9 @@ import com.jaemin.hermes.R
 import com.jaemin.hermes.base.BaseViewBindingFragment
 import com.jaemin.hermes.base.EventObserver
 import com.jaemin.hermes.book.view.adapter.BookAdapter
+import com.jaemin.hermes.book.view.fragment.BookDetailFragment.Companion.FRAGMENT_CONTAINER_VIEW
 import com.jaemin.hermes.book.viewmodel.BookViewModel
 import com.jaemin.hermes.databinding.FragmentBookListBinding
-import com.jaemin.hermes.main.view.activity.MainActivity
 import com.jaemin.hermes.main.view.fragment.MainFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -84,6 +84,7 @@ class BookListFragment : BaseViewBindingFragment<FragmentBookListBinding>(), Boo
             .replace(R.id.fcv_book, BookDetailFragment().apply {
                 val bundle = Bundle()
                 bundle.putString(ISBN, item)
+                bundle.putInt(FRAGMENT_CONTAINER_VIEW, R.id.fcv_book)
                 arguments = bundle
             })
             .addToBackStack(null)

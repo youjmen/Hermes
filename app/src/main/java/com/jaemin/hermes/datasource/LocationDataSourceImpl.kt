@@ -44,7 +44,6 @@ class LocationDataSourceImpl(private val locationService: LocationService, priva
 
     override fun getCurrentLocation(): Single<Place> {
         return userPlaceDao.getUserPlace().map {
-            Log.d("gclplace", it.toString())
             it.last().toEntity()
         }
     }

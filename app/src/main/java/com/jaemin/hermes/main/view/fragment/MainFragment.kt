@@ -11,6 +11,7 @@ import com.jaemin.hermes.R
 import com.jaemin.hermes.base.BaseViewBindingFragment
 import com.jaemin.hermes.book.view.activity.BookActivity
 import com.jaemin.hermes.book.view.fragment.BookDetailFragment
+import com.jaemin.hermes.book.view.fragment.BookDetailFragment.Companion.FRAGMENT_CONTAINER_VIEW
 import com.jaemin.hermes.book.view.fragment.BookListFragment
 import com.jaemin.hermes.databinding.FragmentMainBinding
 import com.jaemin.hermes.entity.Book
@@ -77,6 +78,7 @@ class MainFragment : BaseViewBindingFragment<FragmentMainBinding>(), BookThumbna
             .setCustomAnimations(R.anim.slide_in, R.anim.fade_out,R.anim.fade_in,R.anim.fade_out)
             .replace(R.id.fcv_main, BookDetailFragment().apply {
                 val bundle = Bundle()
+                bundle.putInt(FRAGMENT_CONTAINER_VIEW, R.id.fcv_main)
                 bundle.putString(BookListFragment.ISBN, item)
                 arguments = bundle
             })

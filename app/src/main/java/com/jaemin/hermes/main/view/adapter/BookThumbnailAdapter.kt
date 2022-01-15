@@ -19,7 +19,7 @@ class BookThumbnailAdapter(private val itemClickListener: OnItemClickListener) :
         val binding = ItemBookThumbnailBinding.inflate(inflater, parent, false)
         return BookThumbnailViewHolder(binding).apply {
             binding.root.setOnClickListener {
-                itemClickListener.onItemClick(currentList[adapterPosition].isbn)
+                itemClickListener.onItemClick(currentList[bindingAdapterPosition].isbn)
             }
         }
     }

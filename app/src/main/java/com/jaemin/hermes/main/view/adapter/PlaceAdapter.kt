@@ -14,7 +14,7 @@ class PlaceAdapter(private val itemClickListener: OnItemClickListener) : ListAda
         val binding = ItemPlaceBinding.inflate(inflater, parent, false)
         return PlaceViewHolder(binding).apply {
             binding.root.setOnClickListener {
-                itemClickListener.onItemClick(currentList[adapterPosition])
+                itemClickListener.onItemClick(currentList[bindingAdapterPosition])
             }
         }
     }

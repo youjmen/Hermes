@@ -1,4 +1,4 @@
-package com.jaemin.hermes.datasource.remote
+package com.jaemin.hermes.datasource.remote.interceptor
 
 import okhttp3.Interceptor
 import okhttp3.MediaType

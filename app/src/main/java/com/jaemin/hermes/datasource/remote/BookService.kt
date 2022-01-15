@@ -12,6 +12,9 @@ interface BookService {
     @GET("ItemLookUp.aspx?ttbkey=ttbyoujmen1037002&itemIdType=ISBN13&output=js")
     fun getBookInformation(@Query("ItemId") itemId : String) : Single<BooksResponse>
 
+    @GET("ItemLookUp.aspx?ttbkey=ttbyoujmen1037002&output=js")
+    fun getBookInformationWithISBN(@Query("ItemId") itemId : String) : Single<BooksResponse>
+
     @GET("ItemList.aspx?ttbkey=ttbyoujmen1037002&QueryType=BestSeller&MaxResults=10&start=1&SearchTarget=Book&output=js&Version=20131101")
     fun getBestSellers() : Single<BooksResponse>
 

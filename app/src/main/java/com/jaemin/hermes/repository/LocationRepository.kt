@@ -1,5 +1,6 @@
 package com.jaemin.hermes.repository
 
+import com.jaemin.hermes.entity.Bookstore
 import com.jaemin.hermes.entity.Place
 import com.jaemin.hermes.response.AddressesResponse
 import com.jaemin.hermes.response.PlacesResponse
@@ -17,6 +18,6 @@ interface LocationRepository {
 
     fun getCurrentLocation() : Single<Place>
 
-    fun searchBookstoreByAddressWithRadius(longitude : Double, latitude : Double, radius : Int) : Single<List<Place>>
+    fun searchBookstoreByAddressWithRadius(longitude : Double, latitude : Double, radius : Int) : Single<List<Bookstore>>
 
 }
