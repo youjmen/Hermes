@@ -5,6 +5,7 @@ import com.jaemin.hermes.book.viewmodel.BookViewModel
 import com.jaemin.hermes.datasource.BookDataSource
 import com.jaemin.hermes.datasource.BookDataSourceImpl
 import com.jaemin.hermes.datasource.remote.BookService
+import com.jaemin.hermes.datasource.remote.KyoboBooksScraper
 import com.jaemin.hermes.repository.BookRepository
 import com.jaemin.hermes.repository.BookRepositoryImpl
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -16,7 +17,7 @@ val bookModule = module {
     fun provideBookService(retrofit: Retrofit): BookService =
         retrofit.create(BookService::class.java)
     single { provideBookService(get(named("book"))) }
-    factory<BookDataSource> { BookDataSourceImpl(get()) }
+    factory<BookDataSource> { BookDataSourceImpl(get(), get()) }
     factory<BookRepository> { BookRepositoryImpl(get()) }
     viewModel { BookViewModel(get()) }
     viewModel { BookDetailViewModel(get()) }
