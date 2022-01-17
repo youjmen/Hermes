@@ -14,7 +14,9 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import com.google.android.gms.location.*
 import com.jaemin.hermes.R
 import com.jaemin.hermes.base.BaseViewBindingFragment
@@ -42,6 +44,7 @@ class CheckStockFragment : BaseViewBindingFragment<FragmentCheckStockBinding>(),
     private lateinit var naverMap: NaverMap
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var marker: Marker
+    private lateinit var bookstoreUrl : String
     val markers = mutableListOf<Marker>()
 
 
@@ -64,6 +67,13 @@ class CheckStockFragment : BaseViewBindingFragment<FragmentCheckStockBinding>(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setMap()
+        binding.clBookstoreInformation.setOnClickListener {
+            if (this::bookstoreUrl.isInitialized){
+                val customTabIntent = CustomTabsIntent.Builder().build()
+                customTabIntent.launchUrl(requireContext(), bookstoreUrl.toUri())
+            }
+
+        }
         if (!LocationUtil.checkLocationPermission(requireContext())){
             requestLocationPermission()
         }
@@ -159,21 +169,9 @@ class CheckStockFragment : BaseViewBindingFragment<FragmentCheckStockBinding>(),
         }
         marker.setOnClickListener {
             viewModel.bookstores.value?.get(index)?.let {
-
                 binding.clBookstoreInformation.animate()
                     .translationY(-binding.clBookstoreInformation.height.toFloat())
-                binding.tvBookstoreName.text = it.name
-                binding.tvBookstoreAddress.text = it.roadAddress
-                binding.tvBookstorePhone.text = it.phoneNumber
-
-                if (it.bookStock.isNullOrEmpty()){
-                    binding.tvStocks.text = getString(R.string.unknown_stocks)
-                    binding.tvStocks.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
-                } else{
-                    binding.tvStocks.text = getString(R.string.stocks, it.bookStock)
-                    binding.tvStocks.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
-
-                }
+                setBookstoreInformation(it)
             }
             true
         }
@@ -233,6 +231,22 @@ class CheckStockFragment : BaseViewBindingFragment<FragmentCheckStockBinding>(),
                     getCurrentLocation()
                 }
             }
+        }
+    }
+    private fun setBookstoreInformation(bookstore: Bookstore){
+        binding.tvBookstoreName.text = bookstore.name
+        binding.tvBookstoreAddress.text = bookstore.roadAddress
+        binding.tvBookstorePhone.text = bookstore.phoneNumber
+
+        bookstoreUrl = bookstore.bookstoreUrl
+
+        if (bookstore.bookStock.isNullOrEmpty()){
+            binding.tvStocks.text = getString(R.string.unknown_stocks)
+            binding.tvStocks.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
+        } else{
+            binding.tvStocks.text = getString(R.string.stocks, bookstore.bookStock)
+            binding.tvStocks.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+
         }
     }
 }
