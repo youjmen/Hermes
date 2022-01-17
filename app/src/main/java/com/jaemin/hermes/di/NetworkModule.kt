@@ -25,13 +25,13 @@ val networkModule = module {
 
 }
 fun provideBookRetrofit(okHttpClient: OkHttpClient): Retrofit {
-    return Retrofit.Builder().baseUrl("http://www.aladin.co.kr/ttb/api/")
+    return Retrofit.Builder().baseUrl(BuildConfig.ALADIN_BASE_URL)
         .client(okHttpClient)
         .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
         .addConverterFactory(GsonConverterFactory.create()).build()
 }
 fun provideLocationRetrofit(okHttpClient: OkHttpClient): Retrofit {
-    return Retrofit.Builder().baseUrl("https://dapi.kakao.com/")
+    return Retrofit.Builder().baseUrl(BuildConfig.KAKAO_BASE_URL)
         .client(okHttpClient)
         .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
         .addConverterFactory(GsonConverterFactory.create()).build()
