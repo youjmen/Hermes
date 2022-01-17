@@ -25,10 +25,20 @@ jobs:
       env:
           GOOGLE_SERVICE_JSON: ${{ secrets.GOOGLE_SERVICE_JSON }}
       run: echo $GOOGLE_SERVICE_JSON > app/google-services.json
+    - name: Access TTB_KEY
+      env:
+        TTB_KEY: ${{ secrets.TTB_KEY }}
+      run: echo ttb_key=$TTB_KEY > ./local.properties
+    - name: Access KAKAO_BASE_URL
+      env:
+        KAKAO_BASE_URL: ${{ secrets.KAKAO_BASE_URL }}
+      run: echo kakao_base_url=$KAKAO_BASE_URL >> ./local.properties
+    - name: Access ALADIN_BASE_URL
+      env:
+        ALADIN_BASE_URL: ${{ secrets.ALADIN_BASE_URL }}
+      run: echo aladin_base_url=$KEY_PASS >> ./local.properties
     - name: Build with Gradle
       run: ./gradlew build -x test --stacktrace
-    - name: Test with Gradle
-      run: ./gradlew test
     - name: Build result to slack
       uses: 8398a7/action-slack@v3
       with:
