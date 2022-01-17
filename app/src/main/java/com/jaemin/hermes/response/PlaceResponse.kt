@@ -14,11 +14,13 @@ data class PlaceResponse(
     @SerializedName("x")
     val longitude : String,
     @SerializedName("phone")
-    val phoneNumber : String
+    val phoneNumber : String,
+    @SerializedName("place_url")
+    val placeUrl : String
 )
 
 fun PlaceResponse.toEntity() : Place =
     Place(name, roadAddress, latitude.toDouble(), longitude.toDouble(), phoneNumber)
 
 fun PlaceResponse.toBookstore() : Bookstore =
-    Bookstore(name, roadAddress, latitude.toDouble(), longitude.toDouble(), phoneNumber)
+    Bookstore(name, roadAddress, latitude.toDouble(), longitude.toDouble(), phoneNumber,placeUrl)

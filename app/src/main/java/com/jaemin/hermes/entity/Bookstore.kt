@@ -7,5 +7,6 @@ data class Bookstore(
     val latitude : Double,
     val longitude : Double,
     val phoneNumber : String,
+    val bookstoreUrl : String,
     var bookStock : String? = null
 )
