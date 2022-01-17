@@ -104,4 +104,8 @@ dependencies {
     // Jsoup
     implementation 'org.jsoup:jsoup:1.13.1'
 
+    // Chrome Custom Tab
+    implementation "androidx.browser:browser:1.4.0"
+
+
 }
