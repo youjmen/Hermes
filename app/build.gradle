@@ -20,7 +20,7 @@ android {
         versionName "1.0"
         buildConfigField("String", "ALADIN_BASE_URL", properties.getProperty('aladin_base_url'))
         buildConfigField("String", "KAKAO_BASE_URL", properties.getProperty('kakao_base_url'))
-        buildConfigField("String", "TTB_KEY", properties.getProperty('ttb_key'))
+//        buildConfigField("String", "TTB_KEY", properties.getProperty('ttb_key'))
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
