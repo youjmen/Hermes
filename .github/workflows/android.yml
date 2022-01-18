@@ -37,6 +37,10 @@ jobs:
       env:
         ALADIN_BASE_URL: ${{ secrets.ALADIN_BASE_URL }}
       run: echo aladin_base_url=$ALADIN_BASE_URL >> ./local.properties
+    - name: Access NAVER_CLIENT_ID
+      env:
+        NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
+      run: echo naver_client_id=$NAVER_CLIENT_ID >> ./local.properties
     - name: Build with Gradle
       run: ./gradlew clean && ./gradlew build -x test --stacktrace
     - name: Build result to slack
