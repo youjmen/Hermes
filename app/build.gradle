@@ -95,9 +95,9 @@ dependencies {
     implementation 'com.naver.maps:map-sdk:3.13.0'
     implementation 'com.google.android.gms:play-services-location:19.0.1'
 
-    implementation("androidx.room:room-runtime:2.4.0")
-    kapt("androidx.room:room-compiler:2.4.0")
-    implementation("androidx.room:room-rxjava3:2.4.0")
+    implementation("androidx.room:room-runtime:2.4.1")
+    kapt("androidx.room:room-compiler:2.4.1")
+    implementation("androidx.room:room-rxjava3:2.4.1")
 
     // Blurry
     implementation 'jp.wasabeef:blurry:4.0.1'
