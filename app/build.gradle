@@ -8,6 +8,7 @@ plugins {
 }
 Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
+def naverClientId = properties.getProperty('naver_client_id')
 
 android {
     compileSdk 31
@@ -20,8 +21,10 @@ android {
         versionName "1.0"
         buildConfigField("String", "ALADIN_BASE_URL", properties.getProperty('aladin_base_url'))
         buildConfigField("String", "KAKAO_BASE_URL", properties.getProperty('kakao_base_url'))
-//        buildConfigField("String", "TTB_KEY", properties.getProperty('ttb_key'))
+        buildConfigField("String", "TTB_KEY", properties.getProperty('ttb_key'))
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders = [naverClientId: naverClientId]
+
     }
 
     buildTypes {

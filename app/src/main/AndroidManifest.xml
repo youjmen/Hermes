@@ -33,7 +33,7 @@
             android:exported="true" />
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
-            android:value="6qjos1qwkr" />
+            android:value="${naverClientId}" />
     </application>
 
 </manifest>
