@@ -6,8 +6,9 @@ plugins {
     id 'com.google.firebase.crashlytics'
     id 'kotlin-parcelize'
 }
-//Properties properties = new Properties()
-//properties.load(project.rootProject.file('local.properties').newDataInputStream())
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+def naverClientId = properties.getProperty('naver_client_id')
 
 android {
     compileSdk 31
@@ -18,9 +19,12 @@ android {
         targetSdk 31
         versionCode 1
         versionName "1.0"
-//        buildConfigField("String", "BASE_URL", properties.getProperty('base_url'))
-//        buildConfigField("String", "TTB_KEY", properties.getProperty('ttb_key'))
+        buildConfigField("String", "ALADIN_BASE_URL", properties.getProperty('aladin_base_url'))
+        buildConfigField("String", "KAKAO_BASE_URL", properties.getProperty('kakao_base_url'))
+        buildConfigField("String", "TTB_KEY", properties.getProperty('ttb_key'))
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders = [naverClientId: naverClientId]
+
     }
 
     buildTypes {
@@ -94,9 +98,9 @@ dependencies {
     implementation 'com.naver.maps:map-sdk:3.13.0'
     implementation 'com.google.android.gms:play-services-location:19.0.1'
 
-    implementation("androidx.room:room-runtime:2.4.0")
-    kapt("androidx.room:room-compiler:2.4.0")
-    implementation("androidx.room:room-rxjava3:2.4.0")
+    implementation("androidx.room:room-runtime:2.4.1")
+    kapt("androidx.room:room-compiler:2.4.1")
+    implementation("androidx.room:room-rxjava3:2.4.1")
 
     // Blurry
     implementation 'jp.wasabeef:blurry:4.0.1'
