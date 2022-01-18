@@ -7,21 +7,21 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface BookService {
-    @GET("ItemSearch.aspx?ttbkey=ttbyoujmen1037002&QueryType=Title&MaxResults=20&start=1&SearchTarget=Book&output=js&Version=20131101")
-    fun searchBooks(@Query("Query") bookName : String) : Single<BooksResponse>
+    @GET("ItemSearch.aspx?QueryType=Title&MaxResults=20&start=1&SearchTarget=Book&output=js&Version=20131101")
+    fun searchBooks(@Query("ttbkey") ttbKey : String,@Query("Query") bookName : String) : Single<BooksResponse>
 
-    @GET("ItemLookUp.aspx?ttbkey=ttbyoujmen1037002&itemIdType=ISBN13&output=js")
-    fun getBookInformation(@Query("ItemId") itemId : String) : Single<BooksResponse>
+    @GET("ItemLookUp.aspx?itemIdType=ISBN13&output=js")
+    fun getBookInformation(@Query("ttbkey") ttbKey : String,@Query("ItemId") itemId : String) : Single<BooksResponse>
 
-    @GET("ItemLookUp.aspx?ttbkey=ttbyoujmen1037002}&output=js")
-    fun getBookInformationWithISBN(@Query("ItemId") itemId : String) : Single<BooksResponse>
+    @GET("ItemLookUp.aspx?output=js")
+    fun getBookInformationWithISBN(@Query("ttbkey") ttbKey : String,@Query("ItemId") itemId : String) : Single<BooksResponse>
 
-    @GET("ItemList.aspx?ttbkey=ttbyoujmen1037002&QueryType=BestSeller&MaxResults=10&start=1&SearchTarget=Book&output=js&Version=20131101")
-    fun getBestSellers() : Single<BooksResponse>
+    @GET("ItemList.aspx?QueryType=BestSeller&MaxResults=10&start=1&SearchTarget=Book&output=js&Version=20131101")
+    fun getBestSellers(@Query("ttbkey") ttbKey : String) : Single<BooksResponse>
 
-    @GET("ItemList.aspx?ttbkey=ttbyoujmen1037002&QueryType=ItemNewSpecial&MaxResults=10&start=1&SearchTarget=Book&output=js&Version=20131101")
-    fun getNewSpecialBooks() : Single<BooksResponse>
+    @GET("ItemList.aspx?QueryType=ItemNewSpecial&MaxResults=10&start=1&SearchTarget=Book&output=js&Version=20131101")
+    fun getNewSpecialBooks(@Query("ttbkey") ttbKey : String) : Single<BooksResponse>
 
-    @GET("ItemList.aspx?ttbkey=ttbyoujmen1037002&QueryType=ItemNewAll&MaxResults=10&start=1&SearchTarget=Book&output=js&Version=20131101")
-    fun getNewBooks() : Single<BooksResponse>
+    @GET("ItemList.aspx?QueryType=ItemNewAll&MaxResults=10&start=1&SearchTarget=Book&output=js&Version=20131101")
+    fun getNewBooks(@Query("ttbkey") ttbKey : String) : Single<BooksResponse>
 }

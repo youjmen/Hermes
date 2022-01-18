@@ -1,6 +1,7 @@
 package com.jaemin.hermes.datasource
 
 import android.util.Log
+import com.jaemin.hermes.BuildConfig
 import com.jaemin.hermes.datasource.remote.BookService
 import com.jaemin.hermes.datasource.remote.KyoboBooksScraper
 import com.jaemin.hermes.entity.Bookstore
@@ -10,13 +11,13 @@ import io.reactivex.rxjava3.core.Single
 
 class BookDataSourceImpl(private val bookService: BookService, private val kyoboBooksScraper: KyoboBooksScraper) : BookDataSource {
     override fun searchBooks(bookName: String): Single<BooksResponse> =
-        bookService.searchBooks(bookName)
+        bookService.searchBooks(BuildConfig.TTB_KEY,bookName)
 
     override fun getBookInformation(isbn: String): Single<BooksResponse> {
         return if (isbn.length == 13) {
-            bookService.getBookInformation(isbn)
+            bookService.getBookInformation(BuildConfig.TTB_KEY,isbn)
         } else{
-            bookService.getBookInformationWithISBN(isbn)
+            bookService.getBookInformationWithISBN(BuildConfig.TTB_KEY,isbn)
         }
     }
 
@@ -25,13 +26,13 @@ class BookDataSourceImpl(private val bookService: BookService, private val kyobo
     }
 
     override fun getBestSellers(): Single<BooksResponse> =
-        bookService.getBestSellers()
+        bookService.getBestSellers(BuildConfig.TTB_KEY)
 
     override fun getNewSpecialBooks(): Single<BooksResponse> =
-        bookService.getNewSpecialBooks()
+        bookService.getNewSpecialBooks(BuildConfig.TTB_KEY)
 
     override fun getNewBooks(): Single<BooksResponse> =
-        bookService.getNewBooks()
+        bookService.getNewBooks(BuildConfig.TTB_KEY)
 
 
 }
