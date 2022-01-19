@@ -5,19 +5,39 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Location
 import android.location.LocationManager
 import android.os.Build
 import android.os.Looper
 import android.provider.Settings
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.*
+import com.jaemin.hermes.R
+import com.naver.maps.geometry.LatLng
+import com.naver.maps.map.CameraAnimation
+import com.naver.maps.map.CameraUpdate
 
-object LocationUtil {
-     fun isLocationEnabled(context: Context): Boolean {
+class LocationUtil(private val context: Context,private val currentLocationCallback: CurrentLocationCallback) {
+     private lateinit var fusedLocationProviderClient : FusedLocationProviderClient
+     private val locationCallback = object : LocationCallback() {
+        override fun onLocationResult(locationResult: LocationResult) {
+            if (locationResult.equals(null)) {
+                return
+            }
+            for (location in locationResult.locations) {
+                if (location != null) {
+                    getCurrentLocation()
+                    fusedLocationProviderClient.removeLocationUpdates(this)
+
+                }
+            }
+        }
+    }
+     fun isLocationEnabled(): Boolean {
 
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             val locationManager: LocationManager =
@@ -31,7 +51,7 @@ object LocationUtil {
         }
     }
 
-    fun checkLocationPermission(context: Context): Boolean {
+    fun checkLocationPermission(): Boolean {
         if (ActivityCompat.checkSelfPermission(
                 context,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -51,6 +71,62 @@ object LocationUtil {
     fun launchLocationSettings(activity: Activity) {
         val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
         activity.startActivity(intent)
+    }
+    fun getCurrentLocation(){
+        if (checkLocationPermission()) {
+            fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
+            fusedLocationProviderClient.lastLocation.addOnSuccessListener { location: Location? ->
+                if (location != null) {
+                    currentLocationCallback.onGetCurrentLocationSuccess(location)
+                } else {
+                    requestCurrentLocation()
+                }
+            }
+        }
+    }
+
+    private fun requestCurrentLocation() {
+        if (checkLocationPermission()) {
+            val locationRequest = LocationRequest.create()
+            locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+            fusedLocationProviderClient.requestLocationUpdates(
+                locationRequest,
+                locationCallback,
+                Looper.getMainLooper()
+            )
+        }
+    }
+
+    fun requestLocationPermission(activity: AppCompatActivity) {
+        val locationPermissionRequest = activity.registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()
+        ) { permissions ->
+            if (permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true &&
+                permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true
+            ) {
+
+                fusedLocationProviderClient =
+                    LocationServices.getFusedLocationProviderClient(activity)
+                if (this::fusedLocationProviderClient.isInitialized) {
+                    requestCurrentLocation()
+                }
+            } else {
+                Toast.makeText(activity, activity.getString(R.string.please_allow_location_app_permission), Toast.LENGTH_SHORT).show()
+                activity.onBackPressed()
+            }
+
+        }
+        locationPermissionRequest.launch(
+            arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            )
+        )
+    }
+    interface CurrentLocationCallback{
+        fun onGetCurrentLocationSuccess(location: Location)
+
+
     }
 
 }
