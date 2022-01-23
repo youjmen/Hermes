@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import com.jaemin.hermes.R
 import com.jaemin.hermes.base.BaseViewBindingActivity
-import com.jaemin.hermes.book.view.fragment.BookListFragment
+import com.jaemin.hermes.bookstore.BookstoreSearchFragment
 import com.jaemin.hermes.databinding.ActivityMainBinding
 import com.jaemin.hermes.main.view.fragment.MainFragment
 
@@ -23,7 +23,7 @@ class MainActivity : BaseViewBindingActivity<ActivityMainBinding>() {
                 }
                 R.id.item_find_bookstore->{
                     supportFragmentManager.beginTransaction()
-                        .replace(R.id.fcv_main, BookListFragment())
+                        .replace(R.id.fcv_main, BookstoreSearchFragment())
                         .commit()
                 }
 

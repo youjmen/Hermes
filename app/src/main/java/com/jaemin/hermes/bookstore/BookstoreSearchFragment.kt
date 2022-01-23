@@ -1,4 +1,4 @@
-package com.jaemin.hermes.book.view.fragment
+package com.jaemin.hermes.bookstore
 
 import android.location.Location
 import android.os.Bundle
@@ -6,17 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
-import com.google.android.gms.location.FusedLocationProviderClient
 import com.jaemin.hermes.R
 import com.jaemin.hermes.base.BaseViewBindingFragment
 import com.jaemin.hermes.base.EventObserver
 import com.jaemin.hermes.book.view.data.BookUiModel
-import com.jaemin.hermes.book.viewmodel.CheckStockViewModel
-import com.jaemin.hermes.databinding.FragmentCheckStockBinding
+import com.jaemin.hermes.book.view.fragment.BookDetailFragment
+import com.jaemin.hermes.bookstore.viewmodel.BookstoreSearchViewModel
+import com.jaemin.hermes.databinding.FragmentBookstoreSearchBinding
 import com.jaemin.hermes.entity.Bookstore
 import com.jaemin.hermes.entity.Place
 import com.jaemin.hermes.util.LocationUtil
@@ -28,23 +27,23 @@ import com.naver.maps.map.util.MarkerIcons
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class CheckStockFragment : BaseViewBindingFragment<FragmentCheckStockBinding>(), OnMapReadyCallback,
+class BookstoreSearchFragment : BaseViewBindingFragment<FragmentBookstoreSearchBinding>(),
+    OnMapReadyCallback,
     LocationUtil.CurrentLocationCallback {
 
-    private val viewModel: CheckStockViewModel by viewModel()
+    private val viewModel: BookstoreSearchViewModel by viewModel()
+    private lateinit var locationUtil: LocationUtil
     private lateinit var mapFragment: MapFragment
     private lateinit var naverMap: NaverMap
     private lateinit var marker: Marker
     private lateinit var bookstoreUrl: String
-    private lateinit var locationUtil: LocationUtil
-
     private val markers = mutableListOf<Marker>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         locationUtil = LocationUtil(requireActivity(), this)
         setMap()
-        binding.clBookstoreInformation.setOnClickListener {
+        binding.layoutSearchBookstore.clBookstoreInformation.setOnClickListener {
             if (this::bookstoreUrl.isInitialized) {
                 val customTabIntent = CustomTabsIntent.Builder().build()
                 customTabIntent.launchUrl(requireContext(), bookstoreUrl.toUri())
@@ -70,8 +69,7 @@ class CheckStockFragment : BaseViewBindingFragment<FragmentCheckStockBinding>(),
     override fun setViewBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
-    ): FragmentCheckStockBinding =
-        FragmentCheckStockBinding.inflate(inflater, container, false)
+    ): FragmentBookstoreSearchBinding = FragmentBookstoreSearchBinding.inflate(inflater, container, false)
 
     private fun setMap() {
         mapFragment = childFragmentManager.findFragmentById(R.id.fl_bookstore_map) as MapFragment?
@@ -80,18 +78,6 @@ class CheckStockFragment : BaseViewBindingFragment<FragmentCheckStockBinding>(),
             }
         mapFragment.getMapAsync(this)
     }
-
-    private fun setCurrentLocation(item: Place) {
-        val cameraUpdate = CameraUpdate.scrollTo(LatLng(item.latitude, item.longitude))
-            .animate(CameraAnimation.Easing)
-        naverMap.moveCamera(cameraUpdate)
-        if (this::marker.isInitialized) {
-            marker.map = null
-        }
-        setMarker(item)
-    }
-
-
     override fun onMapReady(map: NaverMap) {
         naverMap = map
         naverMap.maxZoom = 18.0
@@ -111,10 +97,7 @@ class CheckStockFragment : BaseViewBindingFragment<FragmentCheckStockBinding>(),
                 it.forEachIndexed { index, place ->
                     setBookstoreMarker(place, index)
                 }
-                (arguments?.getParcelable(BookDetailFragment.BOOK_INFORMATION) as? BookUiModel)?.let { book ->
-                    viewModel.getBookStocks(book.isbn)
-                    arguments?.remove(BookDetailFragment.BOOK_INFORMATION)
-                }
+
             }
         }
     }
@@ -129,6 +112,17 @@ class CheckStockFragment : BaseViewBindingFragment<FragmentCheckStockBinding>(),
         marker.captionText = item.name
 
     }
+
+    private fun setCurrentLocation(item: Place) {
+        val cameraUpdate = CameraUpdate.scrollTo(LatLng(item.latitude, item.longitude))
+            .animate(CameraAnimation.Easing)
+        naverMap.moveCamera(cameraUpdate)
+        if (this::marker.isInitialized) {
+            marker.map = null
+        }
+        setMarker(item)
+    }
+
 
     private fun setBookstoreMarker(item: Bookstore, index: Int) {
 
@@ -155,8 +149,9 @@ class CheckStockFragment : BaseViewBindingFragment<FragmentCheckStockBinding>(),
         }
         marker.setOnClickListener {
             viewModel.bookstores.value?.get(index)?.let {
-                binding.clBookstoreInformation.animate()
-                    .translationY(-binding.clBookstoreInformation.height.toFloat())
+                binding.layoutSearchBookstore.clBookstoreInformation.animate()
+                    .translationY(-binding.layoutSearchBookstore.clBookstoreInformation
+                        .height.toFloat())
                 setBookstoreInformation(it)
             }
             true
@@ -174,23 +169,17 @@ class CheckStockFragment : BaseViewBindingFragment<FragmentCheckStockBinding>(),
     }
 
     private fun setBookstoreInformation(bookstore: Bookstore) {
-        binding.tvBookstoreName.text = bookstore.name
-        binding.tvBookstoreAddress.text = bookstore.roadAddress
-        binding.tvBookstorePhone.text = bookstore.phoneNumber
+        binding.layoutSearchBookstore.tvBookstoreName.text = bookstore.name
+        binding.layoutSearchBookstore.tvBookstoreAddress.text = bookstore.roadAddress
+        binding.layoutSearchBookstore.tvBookstorePhone.text = bookstore.phoneNumber
 
         bookstoreUrl = bookstore.bookstoreUrl
 
-        if (bookstore.bookStock.isNullOrEmpty()) {
-            binding.tvStocks.text = getString(R.string.unknown_stocks)
-            binding.tvStocks.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
-        } else {
-            binding.tvStocks.text = getString(R.string.stocks, bookstore.bookStock)
-            binding.tvStocks.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
-
-        }
     }
 
     override fun onGetCurrentLocationSuccess(location: Location) {
         setCurrentLocationToMap(location)
     }
+
+
 }

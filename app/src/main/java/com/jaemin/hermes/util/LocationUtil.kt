@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.fragment.app.Fragment
 import com.google.android.gms.location.*
 import com.jaemin.hermes.R
 import com.naver.maps.geometry.LatLng
@@ -113,6 +114,32 @@ class LocationUtil(private val context: Context,private val currentLocationCallb
             } else {
                 Toast.makeText(activity, activity.getString(R.string.please_allow_location_app_permission), Toast.LENGTH_SHORT).show()
                 activity.onBackPressed()
+            }
+
+        }
+        locationPermissionRequest.launch(
+            arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            )
+        )
+    }
+    fun requestLocationPermission(fragment: Fragment) {
+        val locationPermissionRequest = fragment.registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()
+        ) { permissions ->
+            if (permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true &&
+                permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true
+            ) {
+
+                fusedLocationProviderClient =
+                    LocationServices.getFusedLocationProviderClient(fragment.requireActivity())
+                if (this::fusedLocationProviderClient.isInitialized) {
+                    requestCurrentLocation()
+                }
+            } else {
+                Toast.makeText(fragment.requireActivity(), fragment.getString(R.string.please_allow_location_app_permission), Toast.LENGTH_SHORT).show()
+                fragment.requireActivity().onBackPressed()
             }
 
         }
