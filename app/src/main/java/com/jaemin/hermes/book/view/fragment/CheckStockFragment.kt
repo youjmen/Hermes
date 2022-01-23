@@ -42,7 +42,7 @@ class CheckStockFragment : BaseViewBindingFragment<FragmentCheckStockBinding>(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        locationUtil = LocationUtil(requireContext(), this)
+        locationUtil = LocationUtil(requireActivity(), this)
         setMap()
         binding.clBookstoreInformation.setOnClickListener {
             if (this::bookstoreUrl.isInitialized) {
@@ -52,7 +52,7 @@ class CheckStockFragment : BaseViewBindingFragment<FragmentCheckStockBinding>(),
 
         }
         if (!locationUtil.checkLocationPermission()) {
-            locationUtil.requestLocationPermission(requireActivity() as AppCompatActivity)
+            locationUtil.requestLocationPermission(this)
         } else {
             viewModel.getCurrentLocation()
         }
