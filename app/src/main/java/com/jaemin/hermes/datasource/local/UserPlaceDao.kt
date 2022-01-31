@@ -11,8 +11,8 @@ interface UserPlaceDao{
     fun getUserPlace() : Single<List<UserPlace>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertUserPlace(userPlace: UserPlace) : Completable
+    fun insertUserPlace(userPlace: UserPlace) : Single<Unit>
 
     @Query("DELETE FROM user_place")
-    fun deleteAll() : Completable
+    fun deleteAll() : Single<Unit>
 }

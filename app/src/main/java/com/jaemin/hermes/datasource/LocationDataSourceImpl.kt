@@ -38,7 +38,9 @@ class LocationDataSourceImpl(private val locationService: LocationService, priva
         locationService.searchNearbyPlaceWithRadius("서점", longitude.toString(), latitude.toString(), radius)
 
     override fun insertCurrentLocation(place: Place): Completable {
-        return userPlaceDao.insertUserPlace(place.toDBData())
+        return Completable.fromSingle(userPlaceDao.deleteAll().flatMap {
+            userPlaceDao.insertUserPlace(place.toDBData())
+        })
 
     }
 

@@ -10,7 +10,8 @@ import com.jaemin.hermes.R
 import com.jaemin.hermes.databinding.ItemBookBinding
 import com.jaemin.hermes.entity.Book
 
-class BookAdapter(private val itemClickListener: OnItemClickListener) : ListAdapter<Book, BookViewHolder>(BookDiffCallback()) {
+class BookAdapter(private val itemClickListener: OnItemClickListener) :
+    ListAdapter<Book, BookViewHolder>(BookDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -28,16 +29,17 @@ class BookAdapter(private val itemClickListener: OnItemClickListener) : ListAdap
         holder.bind(currentList[position])
 
     }
+
     interface OnItemClickListener {
         fun onItemClick(item: String)
     }
 }
 
-class BookViewHolder(private val binding : ItemBookBinding) : RecyclerView.ViewHolder(binding.root){
-    fun bind(book : Book){
+class BookViewHolder(private val binding: ItemBookBinding) : RecyclerView.ViewHolder(binding.root) {
+    fun bind(book: Book) {
         binding.tvBookName.text = book.title
         binding.tvAuthor.text = book.author
-        binding.tvDescription.text =book.description
+        binding.tvDescription.text = book.description
         binding.tvPrice.text = binding.root.context.getString(R.string.book_price, book.price)
         Glide.with(binding.ivThumbnail)
             .load(book.cover)
@@ -46,13 +48,14 @@ class BookViewHolder(private val binding : ItemBookBinding) : RecyclerView.ViewH
     }
 
 }
-class BookDiffCallback : DiffUtil.ItemCallback<Book>(){
+
+class BookDiffCallback : DiffUtil.ItemCallback<Book>() {
 
     override fun areItemsTheSame(oldItem: Book, newItem: Book): Boolean =
         oldItem == newItem
 
 
-    override fun areContentsTheSame(oldItem: Book, newItem: Book): Boolean  =
+    override fun areContentsTheSame(oldItem: Book, newItem: Book): Boolean =
         oldItem == newItem
 
 }
