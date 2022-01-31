@@ -47,7 +47,12 @@ class MainFragment : BaseViewBindingFragment<FragmentMainBinding>(), BookThumbna
         viewModel.getNewSpecialBooks()
         with(viewModel){
             currentLocation.observe(viewLifecycleOwner){
-                binding.tvLocation.text = it.roadAddress
+                if (it.roadAddress.isNotEmpty()){
+                    binding.tvLocation.text = it.roadAddress
+                }
+                else{
+                    binding.tvLocation.text = it.name
+                }
             }
             bestSellers.observe(viewLifecycleOwner){
                 bestSellerAdapter.submitList(it)
