@@ -12,3 +12,4 @@
 - **refactor:** 코드 리토링
 - **test:** 테스트 코드 추가
 - **chore:** 빌드 관련 업무 수정(안드로이드의 경우 build.gradle, manifest)
+test
