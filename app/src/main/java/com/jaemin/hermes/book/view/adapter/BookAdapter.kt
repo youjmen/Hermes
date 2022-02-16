@@ -2,6 +2,7 @@ package com.jaemin.hermes.book.view.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -9,9 +10,10 @@ import com.bumptech.glide.Glide
 import com.jaemin.hermes.R
 import com.jaemin.hermes.databinding.ItemBookBinding
 import com.jaemin.hermes.entity.Book
+import com.jaemin.hermes.main.view.adapter.BookDiffCallback
 
 class BookAdapter(private val itemClickListener: OnItemClickListener) :
-    ListAdapter<Book, BookViewHolder>(BookDiffCallback()) {
+    PagingDataAdapter<Book, BookViewHolder>(BookDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -19,15 +21,18 @@ class BookAdapter(private val itemClickListener: OnItemClickListener) :
 
         return BookViewHolder(binding).apply {
             binding.root.setOnClickListener {
-                itemClickListener.onItemClick(currentList[bindingAdapterPosition].isbn)
+                getItem(bindingAdapterPosition)?.let { book->
+                    itemClickListener.onItemClick(book.isbn)
+                }
             }
         }
     }
 
 
     override fun onBindViewHolder(holder: BookViewHolder, position: Int) {
-        holder.bind(currentList[position])
-
+        getItem(position)?.let {
+            holder.bind(it)
+        }
     }
 
     interface OnItemClickListener {
@@ -49,13 +54,3 @@ class BookViewHolder(private val binding: ItemBookBinding) : RecyclerView.ViewHo
 
 }
 
-class BookDiffCallback : DiffUtil.ItemCallback<Book>() {
-
-    override fun areItemsTheSame(oldItem: Book, newItem: Book): Boolean =
-        oldItem == newItem
-
-
-    override fun areContentsTheSame(oldItem: Book, newItem: Book): Boolean =
-        oldItem == newItem
-
-}
