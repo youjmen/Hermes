@@ -23,6 +23,7 @@ import com.jaemin.hermes.main.view.adapter.BookThumbnailAdapter
 import com.jaemin.hermes.main.view.adapter.SpecialNewBooksAdapter
 import com.jaemin.hermes.main.viewmodel.MainViewModel
 import com.jaemin.hermes.util.toPx
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -31,7 +32,7 @@ class MainFragment : BaseViewBindingFragment<FragmentMainBinding>(), BookThumbna
     private lateinit var bestSellerAdapter : BookThumbnailAdapter
     private lateinit var newBooksAdapter : BookThumbnailAdapter
     private lateinit var specialNewBooksAdapter : SpecialNewBooksAdapter
-
+    private val compositeDisposable = CompositeDisposable()
     override fun setViewBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -55,15 +56,15 @@ class MainFragment : BaseViewBindingFragment<FragmentMainBinding>(), BookThumbna
                 }
             }
             bestSellers.observe(viewLifecycleOwner){
-                bestSellerAdapter.submitList(it)
+                bestSellerAdapter.submitData(lifecycle,it)
                 binding.srlMain.isRefreshing = false
             }
             newBooks.observe(viewLifecycleOwner){
-                newBooksAdapter.submitList(it)
+                newBooksAdapter.submitData(lifecycle,it)
                 binding.srlMain.isRefreshing = false
             }
             newSpecialBooks.observe(viewLifecycleOwner){
-                specialNewBooksAdapter.submitList(it)
+                specialNewBooksAdapter.submitData(lifecycle,it)
                 binding.vpNewSpecialBooks.currentItem = 1
                 binding.srlMain.isRefreshing = false
             }
@@ -81,12 +82,14 @@ class MainFragment : BaseViewBindingFragment<FragmentMainBinding>(), BookThumbna
     override fun onItemClick(item: String) {
         requireActivity().supportFragmentManager.beginTransaction()
             .setCustomAnimations(R.anim.slide_in, R.anim.fade_out,R.anim.fade_in,R.anim.fade_out)
-            .replace(R.id.fcv_main, BookDetailFragment().apply {
+            .replace(R.id.cl_main, BookDetailFragment().apply {
                 val bundle = Bundle()
                 bundle.putInt(FRAGMENT_CONTAINER_VIEW, R.id.fcv_main)
                 bundle.putString(BookListFragment.ISBN, item)
                 arguments = bundle
             })
+            .hide(this)
+
             .addToBackStack(null)
             .commit()
     }
@@ -136,4 +139,8 @@ class MainFragment : BaseViewBindingFragment<FragmentMainBinding>(), BookThumbna
         binding.vpNewSpecialBooks.setPageTransformer(ScaleViewPagerTransformer(offsetPx))
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        compositeDisposable.clear()
+    }
 }
