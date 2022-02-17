@@ -1,24 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.jaemin.hermes">
+    package="com.jaemin.hermes" >
+
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <application
+        android:name=".base.HermesApplication"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
-        android:name=".base.HermesApplication"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Hermes"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true" >
         <activity
-            android:name="com.jaemin.hermes.book.view.activity.BookActivity"
+            android:name=".book.view.activity.BookDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".book.view.activity.BookActivity"
             android:exported="true" />
         <activity
             android:name=".SplashActivity"
             android:exported="true"
-            android:theme="@style/SplashTheme">
+            android:theme="@style/SplashTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,11 +31,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.jaemin.hermes.main.view.activity.MainActivity"
-            android:exported="true"></activity>
-        <activity
-            android:name="com.jaemin.hermes.main.view.activity.LocationRegisterActivity"
+            android:name=".main.view.activity.MainActivity"
             android:exported="true" />
+        <activity
+            android:name=".main.view.activity.LocationRegisterActivity"
+            android:exported="true" />
+
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="${naverClientId}" />

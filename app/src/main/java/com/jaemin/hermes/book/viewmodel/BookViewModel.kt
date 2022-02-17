@@ -15,6 +15,7 @@ import com.jaemin.hermes.response.toEntity
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 class BookViewModel(private val bookRepository: BookRepository) : BaseViewModel() {
 
@@ -34,11 +35,13 @@ class BookViewModel(private val bookRepository: BookRepository) : BaseViewModel(
     val booksLoadingEvent : LiveData<Event<Unit>> get() = _booksLoadingEvent
 
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     fun searchBooks(bookName : String){
         _booksLoadingEvent.value = Event(Unit)
         _bookName.value = bookName
 
         addDisposable(bookRepository.searchBooksWithPaging(bookName)
+            .cachedIn(viewModelScope)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ response ->
