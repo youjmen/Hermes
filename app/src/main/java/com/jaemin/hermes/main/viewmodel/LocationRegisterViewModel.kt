@@ -48,7 +48,6 @@ class LocationRegisterViewModel(private val locationRepository: LocationReposito
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                Log.d("adsfasdf", it.toString())
                 currentPlace.value = it
 
             }, {

@@ -1,10 +1,13 @@
 package com.jaemin.hermes.repository
 
+import androidx.paging.PagingData
 import com.jaemin.hermes.datasource.BookDataSource
 import com.jaemin.hermes.entity.Book
 import com.jaemin.hermes.entity.Bookstore
 import com.jaemin.hermes.entity.Place
+import com.jaemin.hermes.response.BookResponse
 import com.jaemin.hermes.response.toEntity
+import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 
 class BookRepositoryImpl(private val bookDataSource: BookDataSource) : BookRepository {
@@ -12,6 +15,9 @@ class BookRepositoryImpl(private val bookDataSource: BookDataSource) : BookRepos
         bookDataSource.searchBooks(bookName).map {
             it.item.map { response -> response.toEntity() }
         }
+
+    override fun searchBooksWithPaging(bookName: String): Observable<PagingData<BookResponse>> =
+        bookDataSource.searchBooksWithPaging(bookName)
 
 
     override fun getBookInformation(isbn: String): Single<Book> =
@@ -29,13 +35,24 @@ class BookRepositoryImpl(private val bookDataSource: BookDataSource) : BookRepos
             it.item.map { response -> response.toEntity() }
         }
 
+    override fun getNewSpecialBooksWithPaging(): Observable<PagingData<BookResponse>> {
+        return bookDataSource.getNewSpecialBooksWithPaging()
+    }
+
+    override fun getBestSellersWithPaging(): Observable<PagingData<BookResponse>> =
+        bookDataSource.getBestSellersWithPaging()
+
 
     override fun getNewBooks(): Single<List<Book>> =
         bookDataSource.getNewBooks().map {
             it.item.map { response -> response.toEntity() }
         }
 
-    override fun getBookStocks(isbn: String, bookstores : List<Bookstore>): Single<Unit> =
+    override fun getNewBooksWithPaging(): Observable<PagingData<BookResponse>> {
+        return bookDataSource.getNewBooksWithPaging()
+    }
+
+    override fun getBookStocks(isbn: String, bookstores: List<Bookstore>): Single<Unit> =
         bookDataSource.getKyoboBookStocks(isbn, bookstores)
 
 

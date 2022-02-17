@@ -13,12 +13,14 @@ import com.jaemin.hermes.book.view.fragment.BookDetailFragment.Companion.FRAGMEN
 import com.jaemin.hermes.book.viewmodel.BookViewModel
 import com.jaemin.hermes.databinding.FragmentBookListBinding
 import com.jaemin.hermes.main.view.fragment.MainFragment
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class BookListFragment : BaseViewBindingFragment<FragmentBookListBinding>(), BookAdapter.OnItemClickListener {
     private val viewModel : BookViewModel by viewModel()
     private lateinit var bookAdapter: BookAdapter
+
     override fun setViewBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -51,7 +53,7 @@ class BookListFragment : BaseViewBindingFragment<FragmentBookListBinding>(), Boo
         }
         with(viewModel){
             books.observe(viewLifecycleOwner){
-                bookAdapter.submitList(it)
+                bookAdapter.submitData(lifecycle, it)
                 binding.tvEmptyBooks.visibility = View.GONE
                 binding.pbLoadingBooks.visibility = View.GONE
                 binding.srlBooks.isRefreshing = false
@@ -77,7 +79,6 @@ class BookListFragment : BaseViewBindingFragment<FragmentBookListBinding>(), Boo
     override fun onDestroyView() {
         super.onDestroyView()
     }
-
     override fun onItemClick(item: String) {
         requireActivity().supportFragmentManager.beginTransaction()
             .setCustomAnimations(R.anim.slide_in, R.anim.fade_out,R.anim.fade_in,R.anim.fade_out)
