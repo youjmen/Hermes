@@ -10,6 +10,7 @@ import android.view.inputmethod.EditorInfo
 import com.jaemin.hermes.R
 import com.jaemin.hermes.base.BaseViewBindingFragment
 import com.jaemin.hermes.book.view.activity.BookActivity
+import com.jaemin.hermes.book.view.activity.BookDetailActivity
 import com.jaemin.hermes.book.view.fragment.BookDetailFragment
 import com.jaemin.hermes.book.view.fragment.BookDetailFragment.Companion.FRAGMENT_CONTAINER_VIEW
 import com.jaemin.hermes.book.view.fragment.BookListFragment
@@ -80,18 +81,9 @@ class MainFragment : BaseViewBindingFragment<FragmentMainBinding>(), BookThumbna
     }
 
     override fun onItemClick(item: String) {
-        requireActivity().supportFragmentManager.beginTransaction()
-            .setCustomAnimations(R.anim.slide_in, R.anim.fade_out,R.anim.fade_in,R.anim.fade_out)
-            .replace(R.id.cl_main, BookDetailFragment().apply {
-                val bundle = Bundle()
-                bundle.putInt(FRAGMENT_CONTAINER_VIEW, R.id.fcv_main)
-                bundle.putString(BookListFragment.ISBN, item)
-                arguments = bundle
-            })
-            .hide(this)
-
-            .addToBackStack(null)
-            .commit()
+        requireActivity().startActivity(Intent(requireActivity(), BookDetailActivity::class.java).apply {
+            putExtra(BookListFragment.ISBN, item)
+        })
     }
     private fun initView(){
         bestSellerAdapter = BookThumbnailAdapter(this)
