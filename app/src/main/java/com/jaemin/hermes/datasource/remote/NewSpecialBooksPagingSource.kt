@@ -16,7 +16,13 @@ class NewSpecialBooksPagingSource(private val bookService: BookService) : RxPagi
         }
         return bookService.getNewSpecialBooks(BuildConfig.TTB_KEY, page)
             .map {
-                LoadResult.Page(it.item, page-1, page + 1) as LoadResult<Int, BookResponse>
+                if (it.item.isEmpty()){
+                    Log.d("dsfdsafsf","Fff")
+                    LoadResult.Page(emptyList(), null, null) as LoadResult<Int, BookResponse>
+                }
+                else {
+                    LoadResult.Page(it.item, page - 1, page + 1) as LoadResult<Int, BookResponse>
+                }
             }.onErrorReturn {
                 LoadResult.Error(it)
             }

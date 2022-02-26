@@ -17,8 +17,13 @@ class BestSellerPagingSource(private val bookService: BookService) : RxPagingSou
         }
         return bookService.getBestSellers(BuildConfig.TTB_KEY, page)
             .map {
-                Log.d("okhttppages here?", "calls twice $page")
-                LoadResult.Page(it.item, page-1, page + 1) as LoadResult<Int, BookResponse>
+                if (it.item.isEmpty()){
+                    Log.d("dsfdsafsf","Fff")
+                    LoadResult.Page(emptyList(), null, null) as LoadResult<Int, BookResponse>
+                }
+                else {
+                    LoadResult.Page(it.item, page - 1, page + 1) as LoadResult<Int, BookResponse>
+                }
             }.onErrorReturn {
                 LoadResult.Error(it)
             }
