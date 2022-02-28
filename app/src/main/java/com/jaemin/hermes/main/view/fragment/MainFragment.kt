@@ -2,11 +2,14 @@ package com.jaemin.hermes.main.view.fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import androidx.paging.LoadState
+import androidx.paging.PagingDataAdapter
 import com.jaemin.hermes.R
 import com.jaemin.hermes.base.BaseViewBindingFragment
 import com.jaemin.hermes.book.view.activity.BookActivity
@@ -95,6 +98,41 @@ class MainFragment : BaseViewBindingFragment<FragmentMainBinding>(), BookThumbna
             rvBestsellers.adapter = bestSellerAdapter
             rvNewBooks.adapter = newBooksAdapter
 
+            newBooksAdapter.addLoadStateListener {
+                if (it.source.refresh is LoadState.Error){
+                    binding.clRetry.root.visibility = View.VISIBLE
+                    binding.nsvMain.visibility = View.GONE
+                    binding.pbMain.visibility = View.GONE
+
+                }
+                else if (it.source.refresh is LoadState.Loading){
+                    binding.clRetry.root.visibility = View.GONE
+                    binding.nsvMain.visibility = View.VISIBLE
+                    binding.pbMain.visibility = View.VISIBLE
+                }
+                else if (it.source.refresh is LoadState.NotLoading){
+                    binding.pbMain.visibility = View.GONE
+                }
+            }
+
+            bestSellerAdapter.addLoadStateListener {
+                if (it.source.refresh is LoadState.Error){
+                    binding.clRetry.root.visibility = View.VISIBLE
+                    binding.nsvMain.visibility = View.GONE
+                    binding.pbMain.visibility = View.GONE
+                }
+                else if (it.source.refresh is LoadState.Loading){
+                    binding.clRetry.root.visibility = View.GONE
+                    binding.nsvMain.visibility = View.VISIBLE
+                    binding.pbMain.visibility = View.VISIBLE
+
+                }
+                else if (it.source.refresh is LoadState.NotLoading){
+                    binding.pbMain.visibility = View.GONE
+                }
+            }
+
+
             rvBestsellers.addItemDecoration(bookThumbnailItemDecoration)
             rvNewBooks.addItemDecoration(bookThumbnailItemDecoration)
 
@@ -110,6 +148,9 @@ class MainFragment : BaseViewBindingFragment<FragmentMainBinding>(), BookThumbna
             clLocation.setOnClickListener {
                 startActivity(Intent(requireActivity(), LocationRegisterActivity::class.java))
             }
+            clRetry.ivRefresh.setOnClickListener {
+                retryLoadingAllBooks()
+            }
             srlMain.setOnRefreshListener {
                 viewModel.getNewSpecialBooks()
                 viewModel.getBestSellers()
@@ -121,6 +162,21 @@ class MainFragment : BaseViewBindingFragment<FragmentMainBinding>(), BookThumbna
     private fun setSpecialNewBooksViewPager(){
         specialNewBooksAdapter = SpecialNewBooksAdapter()
         binding.vpNewSpecialBooks.adapter = specialNewBooksAdapter
+        specialNewBooksAdapter.addLoadStateListener {
+            if (it.source.refresh is LoadState.Error){
+                binding.clRetry.root.visibility = View.VISIBLE
+                binding.nsvMain.visibility = View.GONE
+                binding.pbMain.visibility = View.GONE
+            }
+            else if (it.source.refresh is LoadState.Loading){
+                binding.clRetry.root.visibility = View.GONE
+                binding.nsvMain.visibility = View.VISIBLE
+                binding.pbMain.visibility = View.VISIBLE
+            }
+            else if (it.source.refresh is LoadState.NotLoading){
+                binding.pbMain.visibility = View.GONE
+            }
+        }
 
         val pageMarginPx = 8f.toPx(requireContext())
         val pagerWidth = 150f.toPx(requireContext())
@@ -130,6 +186,15 @@ class MainFragment : BaseViewBindingFragment<FragmentMainBinding>(), BookThumbna
         binding.vpNewSpecialBooks.offscreenPageLimit = 2
         binding.vpNewSpecialBooks.setPageTransformer(ScaleViewPagerTransformer(offsetPx))
     }
+    private fun retryLoadingAllBooks(){
+        retryLoadingBooks(bestSellerAdapter)
+        retryLoadingBooks(newBooksAdapter)
+        retryLoadingBooks(specialNewBooksAdapter)
+    }
+    private fun retryLoadingBooks(adapter: PagingDataAdapter<*,*>?){
+        adapter?.retry()
+    }
+
 
     override fun onDestroy() {
         super.onDestroy()

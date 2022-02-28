@@ -1,10 +1,12 @@
 package com.jaemin.hermes.book.view.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import androidx.paging.LoadState
 import com.jaemin.hermes.R
 import com.jaemin.hermes.base.BaseViewBindingFragment
 import com.jaemin.hermes.base.EventObserver
@@ -31,6 +33,27 @@ class BookListFragment : BaseViewBindingFragment<FragmentBookListBinding>(), Boo
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         bookAdapter = BookAdapter(this)
+        bookAdapter.addLoadStateListener { states->
+            if (states.source.refresh is LoadState.NotLoading && bookAdapter.itemCount < 1){
+                binding.tvEmptyBooks.visibility = View.VISIBLE
+                binding.pbLoadingBooks.visibility = View.GONE
+                binding.srlBooks.isRefreshing = false
+            }
+            else if (states.source.refresh is LoadState.Loading){
+                binding.pbLoadingBooks.visibility = View.VISIBLE
+                binding.clRetry.root.visibility = View.GONE
+                binding.rvBooks.visibility = View.VISIBLE
+            }
+            else if (states.source.refresh is LoadState.Error){
+                binding.clRetry.root.visibility = View.VISIBLE
+                binding.rvBooks.visibility = View.GONE
+                binding.pbLoadingBooks.visibility = View.GONE
+            }
+            else if (states.source.refresh is LoadState.NotLoading){
+                binding.pbLoadingBooks.visibility = View.GONE
+            }
+
+        }
         binding.rvBooks.adapter = bookAdapter
 
         arguments?.getString(MainFragment.BOOK_NAME)?.let {
@@ -51,22 +74,24 @@ class BookListFragment : BaseViewBindingFragment<FragmentBookListBinding>(), Boo
         binding.srlBooks.setOnRefreshListener {
             viewModel.searchBooks(viewModel.bookName.value ?: binding.etSearchBooks.text.toString())
         }
+        binding.clRetry.ivRefresh.setOnClickListener {
+            bookAdapter.retry()
+        }
         with(viewModel){
             books.observe(viewLifecycleOwner){
                 bookAdapter.submitData(lifecycle, it)
                 binding.tvEmptyBooks.visibility = View.GONE
-                binding.pbLoadingBooks.visibility = View.GONE
                 binding.srlBooks.isRefreshing = false
 
             }
             booksEmptyEvent.observe(viewLifecycleOwner, EventObserver{
                 binding.tvEmptyBooks.visibility = View.VISIBLE
-                binding.pbLoadingBooks.visibility =  View.GONE
+                binding.pbLoadingBooks.visibility = View.GONE
                 binding.srlBooks.isRefreshing = false
 
             })
             booksErrorEvent.observe(viewLifecycleOwner, EventObserver{
-                binding.pbLoadingBooks.visibility =  View.GONE
+                binding.pbLoadingBooks.visibility = View.GONE
                 binding.srlBooks.isRefreshing = false
             })
             booksLoadingEvent.observe(viewLifecycleOwner, EventObserver{
