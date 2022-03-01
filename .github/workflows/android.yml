@@ -43,8 +43,6 @@ jobs:
       env:
         NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
       run: echo naver_client_id=$NAVER_CLIENT_ID >> ./local.properties
-    - name: Build with Gradle
-      run: ./gradlew clean && ./gradlew build -x test --stacktrace
     - name: Build result to slack
       uses: 8398a7/action-slack@v3
       with:
