@@ -43,19 +43,11 @@ jobs:
       env:
         NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
       run: echo naver_client_id=$NAVER_CLIENT_ID >> ./local.properties
-    - name: Build result to slack
-      uses: 8398a7/action-slack@v3
-      with:
-        status: ${{ job.status }}
-        fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_CI_WEBHOOK_URL }} 
-      if: always()
+    - name: Build with Gradle
+      run: ./gradlew clean && ./gradlew build -x test --stacktrace
     - name: Build Release AAB
       id: buildRelease
       run: ./gradlew bundleRelease
-
     - name: Sign AAB
       id: sign
       uses: r0adkll/sign-android-release@v1
@@ -84,5 +76,14 @@ jobs:
         serviceAccountJson: service_account.json
         packageName: com.jaemin.hermes
         releaseFiles: app/build/outputs/bundle/release/app-release.aab    
+    - name: Build result to slack
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_CI_WEBHOOK_URL }} 
+      if: always()
       
 
