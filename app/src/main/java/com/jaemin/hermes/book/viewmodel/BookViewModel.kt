@@ -46,9 +46,6 @@ class BookViewModel(private val bookRepository: BookRepository) : BaseViewModel(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ response ->
                 _books.value = response.map { it.toEntity() }
-//                if (_books.value?.is){
-//                    _booksEmptyEvent.value = Event(Unit)
-//                }
             },{
                 _booksErrorEvent.value = Event(Unit)
             }))

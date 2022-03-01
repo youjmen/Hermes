@@ -17,4 +17,7 @@
     <string name="new_books">신간 도서</string>
     <string name="bestsellers">베스트셀러</string>
     <string name="please_allow_location_app_permission">앱 정보 > 권한에서 위치 접근 권한을 허용해주세요."</string>
+    <string name="error_occur_please_retry">오류가 발생했습니다. 다시 시도해 주세요.</string>
+    <string name="cannot_load_list">목록을 불러올 수 없습니다.</string>
+
 </resources>

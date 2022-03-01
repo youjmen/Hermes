@@ -11,14 +11,12 @@ import java.lang.Exception
 class BestSellerPagingSource(private val bookService: BookService) : RxPagingSource<Int, BookResponse>() {
     override fun loadSingle(params: LoadParams<Int>): Single<LoadResult<Int, BookResponse>>{
         val page = params.key ?: 1
-        Log.d("okhttppages", "calls twice $page")
         if (page < 1){
             return Single.just(LoadResult.Error(Exception("page under 0")))
         }
         return bookService.getBestSellers(BuildConfig.TTB_KEY, page)
             .map {
                 if (it.item.isEmpty()){
-                    Log.d("dsfdsafsf","Fff")
                     LoadResult.Page(emptyList(), null, null) as LoadResult<Int, BookResponse>
                 }
                 else {

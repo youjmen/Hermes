@@ -2,6 +2,7 @@ package com.jaemin.hermes.book.view.fragment
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.jaemin.hermes.R
 import com.jaemin.hermes.base.BaseViewBindingFragment
+import com.jaemin.hermes.base.EventObserver
 import com.jaemin.hermes.book.view.data.BookUiModel
 import com.jaemin.hermes.book.viewmodel.BookDetailViewModel
 import com.jaemin.hermes.databinding.FragmentBookDetailBinding
@@ -31,9 +33,7 @@ class BookDetailFragment : BaseViewBindingFragment<FragmentBookDetailBinding>() 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        arguments?.getString(BookListFragment.ISBN)?.let {
-            viewModel.getBookInformation(it)
-        }
+        getBookInformation()
         binding.clCheckStock.setOnClickListener {
             val fcvId = arguments?.getInt(FRAGMENT_CONTAINER_VIEW)
             fcvId?.let {
@@ -59,10 +59,22 @@ class BookDetailFragment : BaseViewBindingFragment<FragmentBookDetailBinding>() 
             }
 
         }
+        binding.clRetry.ivRefresh.setOnClickListener {
+            getBookInformation()
+        }
         with(viewModel) {
             bookInformation.observe(viewLifecycleOwner) {
+                binding.pbLoading.visibility = View.GONE
+                binding.clRetry.root.visibility = View.GONE
                 setBookInformation(it)
             }
+            bookInformationErrorEvent.observe(viewLifecycleOwner, EventObserver{
+                binding.pbLoading.visibility = View.GONE
+                binding.clRetry.root.visibility = View.VISIBLE
+            })
+            bookInformationLoadingEvent.observe(viewLifecycleOwner, EventObserver{
+                binding.pbLoading.visibility = View.VISIBLE
+            })
 
         }
 
@@ -106,6 +118,11 @@ class BookDetailFragment : BaseViewBindingFragment<FragmentBookDetailBinding>() 
         binding.tvDescription.text = book.description
         binding.tvPrice.text = getString(R.string.book_price_detail, book.price)
 
+    }
+    private fun getBookInformation(){
+        arguments?.getString(BookListFragment.ISBN)?.let {
+            viewModel.getBookInformation(it)
+        }
     }
     companion object{
         const val BOOK_INFORMATION = "bookInformation"
