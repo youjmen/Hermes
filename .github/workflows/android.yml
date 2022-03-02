@@ -47,6 +47,7 @@ jobs:
       run: ./gradlew clean && ./gradlew build -x test --stacktrace
       
   deploy:
+    needs: build
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/release'
 
