@@ -5,7 +5,7 @@ on:
   pull_request:
     branches: [ main , develop ]
   push:
-    branches: [ develop ]
+    branches: [ develop, release ]
 
 jobs:
   build:
@@ -45,6 +45,12 @@ jobs:
       run: echo naver_client_id=$NAVER_CLIENT_ID >> ./local.properties
     - name: Build with Gradle
       run: ./gradlew clean && ./gradlew build -x test --stacktrace
+      
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/release'
+
+    steps:
     - name: Build Release AAB
       id: buildRelease
       run: ./gradlew bundleRelease
