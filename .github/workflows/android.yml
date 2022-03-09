@@ -73,6 +73,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - run: |
+        echo "${{ secrets.KEYSTORE}}" > hermeskeystore.jks.asc
+        gpg -d --passphrase "${{ secrets.KEYSTORE_PASSWORD}}" --batch hermeskeystore.jks.asc > app/hermeskeystore.jks
     - name: set up JDK 11
       uses: actions/setup-java@v2
       with:
