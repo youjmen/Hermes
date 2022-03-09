@@ -5,12 +5,13 @@ on:
   pull_request:
     branches: [ main , develop ]
   push:
-    branches: [ develop ]
+    branches: [ develop, release ]
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop'
 
     steps:
     - uses: actions/checkout@v2
@@ -45,6 +46,50 @@ jobs:
       run: echo naver_client_id=$NAVER_CLIENT_ID >> ./local.properties
     - name: Build with Gradle
       run: ./gradlew clean && ./gradlew build -x test --stacktrace
+    - name: Build Unit Test
+      run: ./gradlew test
+      
+      
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/release'
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: set up JDK 11
+      uses: actions/setup-java@v2
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+        cache: gradle
+
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    - name: Decode google-services.json
+      env:
+          GOOGLE_SERVICE_JSON: ${{ secrets.GOOGLE_SERVICE_JSON }}
+      run: echo $GOOGLE_SERVICE_JSON > app/google-services.json
+    - name: Access TTB_KEY
+      env:
+        TTB_KEY: ${{ secrets.TTB_KEY }}
+      run: echo ttb_key=$TTB_KEY > ./local.properties
+    - name: Access KAKAO_BASE_URL
+      env:
+        KAKAO_BASE_URL: ${{ secrets.KAKAO_BASE_URL }}
+      run: echo kakao_base_url=$KAKAO_BASE_URL >> ./local.properties
+    - name: Access ALADIN_BASE_URL
+      env:
+        ALADIN_BASE_URL: ${{ secrets.ALADIN_BASE_URL }}
+      run: echo aladin_base_url=$ALADIN_BASE_URL >> ./local.properties
+    - name: Access NAVER_CLIENT_ID
+      env:
+        NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
+      run: echo naver_client_id=$NAVER_CLIENT_ID >> ./local.properties
+    - name: Build with Gradle
+      run: ./gradlew clean && ./gradlew build -x test --stacktrace
+    - name: Build Unit Test
+      run: ./gradlew test
+      
     - name: Build Release AAB
       id: buildRelease
       run: ./gradlew bundleRelease
