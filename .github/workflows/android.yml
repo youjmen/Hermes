@@ -66,6 +66,7 @@ jobs:
     - name: Build Unit Test
       run: ./gradlew test
 
+
   build_and_deploy:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/release'
@@ -119,7 +120,8 @@ jobs:
       run: ./gradlew clean && ./gradlew build -x test --stacktrace
     - name: Build Unit Test
       run: ./gradlew test
-      
+    - name: Build with Gradle
+      run: ./gradlew clean && ./gradlew build -x test --stacktrace      
     - name: Build Release AAB
       id: buildRelease
       run: ./gradlew bundleRelease
