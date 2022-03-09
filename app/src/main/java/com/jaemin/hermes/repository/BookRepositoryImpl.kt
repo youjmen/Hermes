@@ -52,7 +52,7 @@ class BookRepositoryImpl(private val bookDataSource: BookDataSource) : BookRepos
         return bookDataSource.getNewBooksWithPaging()
     }
 
-    override fun getBookStocks(isbn: String, bookstores: List<Bookstore>): Single<Unit> =
+    override fun getBookStocks(isbn: String, bookstores: List<Bookstore>): Single<List<Bookstore>> =
         bookDataSource.getKyoboBookStocks(isbn, bookstores)
 
 

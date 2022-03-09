@@ -27,6 +27,6 @@ interface BookRepository {
 
     fun getNewBooksWithPaging() : Observable<PagingData<BookResponse>>
 
-    fun getBookStocks(isbn : String, bookstores : List<Bookstore>) : Single<Unit>
+    fun getBookStocks(isbn : String, bookstores : List<Bookstore>) : Single<List<Bookstore>>
 
 }

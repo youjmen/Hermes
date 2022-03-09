@@ -7,7 +7,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 import org.jsoup.Jsoup
 
 class KyoboBooksScraper {
-    fun scrapBookStock(isbn: String, bookstores: List<Bookstore>): Single<Unit> {
+    fun scrapBookStock(isbn: String, bookstores: List<Bookstore>): Single<List<Bookstore>> {
         return Single.just(isbn)
             .map {
                 val url =
@@ -37,6 +37,7 @@ class KyoboBooksScraper {
                     }
 
                 }
+                bookstores
             }
             .subscribeOn(Schedulers.computation())
 
