@@ -15,7 +15,7 @@ interface BookDataSource {
 
     fun getBookInformation(isbn : String) : Single<BooksResponse>
 
-    fun getKyoboBookStocks(isbn : String, bookstores : List<Bookstore>) : Single<Unit>
+    fun getKyoboBookStocks(isbn : String, bookstores : List<Bookstore>) : Single<List<Bookstore>>
 
     fun getBestSellers() : Single<BooksResponse>
 
