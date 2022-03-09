@@ -27,6 +27,7 @@ class CheckStockViewModel(
     val bookstores: LiveData<List<Bookstore>> get() = _bookstores
 
     fun searchCurrentLocationPlace(longitude: Double, latitude: Double) {
+
         addDisposable(
             locationRepository.searchPlaceByAddress(longitude, latitude)
                 .subscribeOn(Schedulers.io())
@@ -50,6 +51,7 @@ class CheckStockViewModel(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
+
                     currentPlace.value = it
                 }, {
                     _emptySavedLocationEvent.value = Event(Unit)
@@ -79,8 +81,8 @@ class CheckStockViewModel(
             addDisposable(
                 bookRepository.getBookStocks(isbn, it)
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({
-                        _bookstores.value = _bookstores.value
+                    .subscribe({ bookstores ->
+                        _bookstores.value = bookstores
                     }, {
 
                     })

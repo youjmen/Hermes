@@ -36,7 +36,7 @@ class BookDataSourceImpl(
         }
     }
 
-    override fun getKyoboBookStocks(isbn: String, bookstores: List<Bookstore>): Single<Unit> {
+    override fun getKyoboBookStocks(isbn: String, bookstores: List<Bookstore>): Single<List<Bookstore>> {
         return kyoboBooksScraper.scrapBookStock(isbn, bookstores)
     }
 

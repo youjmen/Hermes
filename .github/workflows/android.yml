@@ -15,6 +15,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - run: |
+        echo "${{ secrets.KEYSTORE}}" > hermeskeystore.jks.asc
+        gpg -d --passphrase "${{ secrets.KEYSTORE_PASSWORD}}" --batch hermeskeystore.jks.asc > app/hermeskeystore.jks
     - name: set up JDK 11
       uses: actions/setup-java@v2
       with:
@@ -44,9 +47,26 @@ jobs:
       env:
         NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
       run: echo naver_client_id=$NAVER_CLIENT_ID >> ./local.properties
+    - name: Access KEYSTORE
+      run: echo keystore="hermeskeystore.jks" >> ./local.properties
+    - name: Access KEYSTORE_PASSWORD
+      env:
+        KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+      run: echo keystore_pass=$KEYSTORE_PASSWORD >> ./local.properties
+    - name: Access KEY_ALIAS
+      env:
+        KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+      run: echo key_alias=$KEY_ALIAS >> ./local.properties
+    - name: Access KEY_PASSWORD
+      env:
+        KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+      run: echo key_pass=$KEY_PASSWORD >> ./local.properties
     - name: Build with Gradle
       run: ./gradlew clean && ./gradlew build -x test --stacktrace
-      
+    - name: Build Unit Test
+      run: ./gradlew test
+
+
   build_and_deploy:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/release'
@@ -82,9 +102,26 @@ jobs:
       env:
         NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
       run: echo naver_client_id=$NAVER_CLIENT_ID >> ./local.properties
+    - name: Access KEYSTORE
+      run: echo keystore="hermeskeystore.jks" >> ./local.properties
+    - name: Access KEYSTORE_PASSWORD
+      env:
+        KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+      run: echo keystore_pass=$KEYSTORE_PASSWORD >> ./local.properties
+    - name: Access KEY_ALIAS
+      env:
+        KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+      run: echo key_alias=$KEY_ALIAS >> ./local.properties
+    - name: Access KEY_PASSWORD
+      env:
+        KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+      run: echo key_pass=$KEY_PASSWORD >> ./local.properties
     - name: Build with Gradle
       run: ./gradlew clean && ./gradlew build -x test --stacktrace
-      
+    - name: Build Unit Test
+      run: ./gradlew test
+    - name: Build with Gradle
+      run: ./gradlew clean && ./gradlew build -x test --stacktrace      
     - name: Build Release AAB
       id: buildRelease
       run: ./gradlew bundleRelease
