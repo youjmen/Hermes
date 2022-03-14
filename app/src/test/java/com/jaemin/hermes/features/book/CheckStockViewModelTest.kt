@@ -66,7 +66,7 @@ class CheckStockViewModelTest : BaseTest() {
         verify(locationRepository).getCurrentLocation()
 
         Assert.assertEquals(checkStockViewModel.currentPlace.getOrAwaitValue(),
-            Place("신세계백화점","",0.0,0.1,"")
+            Place("신세계백화점","",0.0,0.0,"")
         )
     }
 
