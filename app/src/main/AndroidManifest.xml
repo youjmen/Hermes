@@ -15,10 +15,10 @@
         android:theme="@style/Theme.Hermes"
         android:usesCleartextTraffic="true" >
         <activity
-            android:name=".book.view.activity.BookDetailActivity"
+            android:name="com.jaemin.hermes.features.book.view.activity.BookDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".book.view.activity.BookActivity"
+            android:name="com.jaemin.hermes.features.book.view.activity.BookActivity"
             android:exported="true" />
         <activity
             android:name=".SplashActivity"
@@ -31,10 +31,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".main.view.activity.MainActivity"
+            android:name="com.jaemin.hermes.features.main.view.activity.MainActivity"
             android:exported="true" />
         <activity
-            android:name=".main.view.activity.LocationRegisterActivity"
+            android:name="com.jaemin.hermes.features.main.view.activity.LocationRegisterActivity"
             android:exported="true" />
 
         <meta-data

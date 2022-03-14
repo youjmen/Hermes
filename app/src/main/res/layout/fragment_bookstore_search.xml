@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".bookstore.BookstoreSearchFragment">
+    tools:context="com.jaemin.hermes.features.bookstore.BookstoreSearchFragment">
 
     <include
       android:id="@+id/layout_search_bookstore"

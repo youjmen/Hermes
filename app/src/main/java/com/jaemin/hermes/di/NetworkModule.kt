@@ -1,9 +1,9 @@
 package com.jaemin.hermes.di
 
 import com.jaemin.hermes.BuildConfig
-import com.jaemin.hermes.datasource.remote.interceptor.CorrectionJsonInterceptor
-import com.jaemin.hermes.datasource.remote.interceptor.HtmlEntityInterceptor
-import com.jaemin.hermes.datasource.remote.interceptor.KakaoInterceptor
+import com.jaemin.hermes.data.datasource.remote.interceptor.CorrectionJsonInterceptor
+import com.jaemin.hermes.data.datasource.remote.interceptor.HtmlEntityInterceptor
+import com.jaemin.hermes.data.datasource.remote.interceptor.KakaoInterceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.core.qualifier.named

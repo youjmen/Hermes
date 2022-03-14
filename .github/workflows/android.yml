@@ -11,7 +11,7 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/develop'
+    if: github.ref != 'refs/heads/release'
 
     steps:
     - uses: actions/checkout@v2

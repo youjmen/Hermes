@@ -1,13 +1,12 @@
 package com.jaemin.hermes.di
 
-import com.jaemin.hermes.book.viewmodel.BookDetailViewModel
-import com.jaemin.hermes.book.viewmodel.BookViewModel
-import com.jaemin.hermes.datasource.BookDataSource
-import com.jaemin.hermes.datasource.BookDataSourceImpl
-import com.jaemin.hermes.datasource.remote.BookService
-import com.jaemin.hermes.datasource.remote.KyoboBooksScraper
-import com.jaemin.hermes.repository.BookRepository
-import com.jaemin.hermes.repository.BookRepositoryImpl
+import com.jaemin.hermes.features.book.viewmodel.BookDetailViewModel
+import com.jaemin.hermes.features.book.viewmodel.BookViewModel
+import com.jaemin.hermes.data.datasource.BookDataSource
+import com.jaemin.hermes.data.datasource.BookDataSourceImpl
+import com.jaemin.hermes.data.datasource.remote.BookService
+import com.jaemin.hermes.data.repository.BookRepository
+import com.jaemin.hermes.data.repository.BookRepositoryImpl
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
