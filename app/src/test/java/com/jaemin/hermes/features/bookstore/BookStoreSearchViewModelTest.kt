@@ -31,10 +31,10 @@ class BookStoreSearchViewModelTest : BaseTest() {
         whenever(locationRepository.searchBookstoreByAddressWithRadius(0.0,0.0 ,10)).thenReturn(
             Single.just(bookstores))
 
+        bookstoreSearchViewModel.searchBookstoreByAddressWithRadius(0.0,0.0 ,10)
+
         verify(locationRepository).searchBookstoreByAddressWithRadius(0.0,0.0 ,10)
 
-
-        bookstoreSearchViewModel.searchBookstoreByAddressWithRadius(0.0,0.0 ,10)
         Assert.assertEquals(bookstoreSearchViewModel.bookstores.getOrAwaitValue(), listOf(Bookstore("","",0.0,0.0,"","")))
 
     }
