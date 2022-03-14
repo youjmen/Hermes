@@ -2,8 +2,8 @@ package com.jaemin.hermes.di
 
 import android.app.Application
 import androidx.room.Room
-import com.jaemin.hermes.datasource.local.UserPlaceDao
-import com.jaemin.hermes.datasource.local.UserPlaceDatabase
+import com.jaemin.hermes.data.datasource.local.UserPlaceDao
+import com.jaemin.hermes.data.datasource.local.UserPlaceDatabase
 import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module
 
