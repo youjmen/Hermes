@@ -9,6 +9,7 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
 class BookStoreSearchViewModelTest : BaseTest() {
@@ -31,6 +32,9 @@ class BookStoreSearchViewModelTest : BaseTest() {
             Single.just(bookstores))
 
         bookstoreSearchViewModel.searchBookstoreByAddressWithRadius(0.0,0.0 ,10)
+
+        verify(locationRepository).searchBookstoreByAddressWithRadius(0.0,0.0 ,10)
+
         Assert.assertEquals(bookstoreSearchViewModel.bookstores.getOrAwaitValue(), listOf(Bookstore("","",0.0,0.0,"","")))
 
     }
