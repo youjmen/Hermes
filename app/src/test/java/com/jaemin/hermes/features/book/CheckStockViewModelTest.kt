@@ -54,6 +54,9 @@ class CheckStockViewModelTest : BaseTest() {
             Single.just(bookstores))
 
         checkStockViewModel.searchBookstoreByAddressWithRadius(0.0,0.0 ,10)
+
+        verify(locationRepository).searchBookstoreByAddressWithRadius(0.0,0.0 ,10)
+
         Assert.assertEquals(checkStockViewModel.bookstores.getOrAwaitValue(), listOf(Bookstore("","",0.0,0.0,"","")))
 
     }
