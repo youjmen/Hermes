@@ -1,4 +1,6 @@
 # Hermes
+⚠️ 현재 교보문고 API 변경으로 인해 재고 조회 불가
+
 ![release](https://github.com/youjmen/Hermes/actions/workflows/android.yml/badge.svg?branch=release)
 
 내 주변 서점 정보, 책 재고 조회를 할 수 있게 도와주는 앱 입니다.
